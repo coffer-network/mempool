@@ -46,6 +46,8 @@ services:
     restart: always
     # stop_grace_period: 1m
     command: "./wait-for-it.sh db:3306 --timeout=720 --strict -- ./start.sh"
+    ports:
+      - 127.0.0.1:8999:8999
     volumes:
       - ./data:/backend/cache
     networks:
