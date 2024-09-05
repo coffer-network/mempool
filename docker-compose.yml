@@ -12,7 +12,10 @@ services:
     stop_grace_period: 1m
     command: "./wait-for db:3306 --timeout=720 -- nginx -g 'daemon off;'"
     ports:
-      - 80:8080
+      - 127.0.0.1:8080:8080
+    networks:
+      regtest-mempool:
+      coffer-regtest-node_regtest-node:
 
   api:
     extra_hosts:
@@ -20,10 +23,12 @@ services:
     environment:
       MEMPOOL_NETWORK": "regtest"
       MEMPOOL_BACKEND: "electrum"
-      ELECTRUM_HOST: "host.docker.internal"
+      # ELECTRUM_HOST: "host.docker.internal"
+      ELECTRUM_HOST: "coffer-regtest-node-regtest-electrs"
       ELECTRUM_PORT: "60401"
       ELECTRUM_TLS_ENABLED: "false"
-      CORE_RPC_HOST: "host.docker.internal"
+      # CORE_RPC_HOST: "host.docker.internal"
+      CORE_RPC_HOST: "coffer-regtest-node-regtest-bitcoind"
       CORE_RPC_PORT: "18443"
       CORE_RPC_USERNAME: "rpcuser"
       CORE_RPC_PASSWORD: "rpcpass"
@@ -41,6 +46,9 @@ services:
     command: "./wait-for-it.sh db:3306 --timeout=720 --strict -- ./start.sh"
     volumes:
       - ./data:/backend/cache
+    networks:
+      regtest-mempool:
+      coffer-regtest-node_regtest-node:
 
   db:
     extra_hosts:
@@ -57,3 +65,10 @@ services:
     stop_grace_period: 1m
     volumes:
       - ./mysql/data:/var/lib/mysql
+    networks:
+      regtest-mempool:
+
+networks:
+  regtest-mempool:
+  coffer-regtest-node_regtest-node:
+    external: true
