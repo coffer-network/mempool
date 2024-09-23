@@ -13,6 +13,13 @@ export namespace IEsploraApi {
     hex?: string;
   }
 
+  export interface Utxo {
+    txid: string;
+    vout: number;
+    value: number;
+    status: Status;
+  }
+
   export interface Recent {
     txid: string;
     fee: number;
