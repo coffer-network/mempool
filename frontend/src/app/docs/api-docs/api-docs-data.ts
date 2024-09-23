@@ -1,7 +1,7 @@
-const bitcoinNetworks = ["", "testnet", "testnet4", "signet"];
-const liquidNetworks = ["liquid", "liquidtestnet"];
-const lightningNetworks = ["", "testnet", "signet"];
-const miningTimeIntervals = "<code>24h</code>, <code>3d</code>, <code>1w</code>, <code>1m</code>, <code>3m</code>, <code>6m</code>, <code>1y</code>, <code>2y</code>, <code>3y</code>";
+const bitcoinNetworks = ['', 'testnet', 'testnet4', 'signet', 'regtest'];
+const liquidNetworks = ['liquid', 'liquidtestnet'];
+const lightningNetworks = ['', 'testnet', 'signet'];
+const miningTimeIntervals = '<code>24h</code>, <code>3d</code>, <code>1w</code>, <code>1m</code>, <code>3m</code>, <code>6m</code>, <code>1y</code>, <code>2y</code>, <code>3y</code>';
 
 const emptyCodeSample = {
   esModule: [],
@@ -10,8 +10,8 @@ const emptyCodeSample = {
   response: ``
 };
 
-const showJsExamplesDefault = { "": true, "testnet": true, "signet": true, "liquid": true, "liquidtestnet": false };
-const showJsExamplesDefaultFalse = { "": false, "testnet": false, "signet": false, "liquid": false, "liquidtestnet": false };
+const showJsExamplesDefault = { '': true, 'testnet': true, 'signet': true, 'regtest': true , 'liquid': true, 'liquidtestnet': false };
+const showJsExamplesDefaultFalse = { '': false, 'testnet': false, 'signet': false, 'regtest': false, 'liquid': false, 'liquidtestnet': false };
 
 export const wsApiDocsData = {
   showJsExamples: showJsExamplesDefault,
@@ -106,22 +106,22 @@ if __name__ == "__main__":
 
 export const restApiDocsData = [
   {
-    type: "category",
-    category: "general",
-    fragment: "general",
-    title: "General",
+    type: 'category',
+    category: 'general',
+    fragment: 'general',
+    title: 'General',
     showConditions: bitcoinNetworks,
   },
   {
-    type: "endpoint",
-    category: "general",
-    httpRequestMethod: "GET",
-    fragment: "get-difficulty-adjustment",
-    title: "GET Difficulty Adjustment",
+    type: 'endpoint',
+    category: 'general',
+    httpRequestMethod: 'GET',
+    fragment: 'get-difficulty-adjustment',
+    title: 'GET Difficulty Adjustment',
     description: {
-      default: "Returns details about difficulty adjustment."
+      default: 'Returns details about difficulty adjustment.'
     },
-    urlString: "/v1/difficulty-adjustment",
+    urlString: '/v1/difficulty-adjustment',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -214,16 +214,16 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "general",
-    httpRequestMethod: "GET",
-    fragment: "get-price",
-    title: "GET Price",
+    type: 'endpoint',
+    category: 'general',
+    httpRequestMethod: 'GET',
+    fragment: 'get-price',
+    title: 'GET Price',
     description: {
-      default: "Returns bitcoin latest price denominated in main currencies."
+      default: 'Returns bitcoin latest price denominated in main currencies.'
     },
-    urlString: "/v1/prices",
-    showConditions: [""],
+    urlString: '/v1/prices',
+    showConditions: [''],
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
       default: {
@@ -255,16 +255,16 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "general",
-    httpRequestMethod: "GET",
-    fragment: "get-historical-price",
-    title: "GET Historical Price",
+    type: 'endpoint',
+    category: 'general',
+    httpRequestMethod: 'GET',
+    fragment: 'get-historical-price',
+    title: 'GET Historical Price',
     description: {
-      default: "Returns bitcoin historical price denominated in main currencies. Available query parameters: <code>currency</code>, <code>timestamp</code>. If no parameter is provided, the full price history for all currencies is returned."
+      default: 'Returns bitcoin historical price denominated in main currencies. Available query parameters: <code>currency</code>, <code>timestamp</code>. If no parameter is provided, the full price history for all currencies is returned.'
     },
-    urlString: "/v1/historical-price?currency=EUR&timestamp=1500000000",
-    showConditions: [""],
+    urlString: '/v1/historical-price?currency=EUR&timestamp=1500000000',
+    showConditions: [''],
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
       default: {
@@ -304,22 +304,22 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "category",
-    category: "addresses",
-    fragment: "addresses",
-    title: "Addresses",
+    type: 'category',
+    category: 'addresses',
+    fragment: 'addresses',
+    title: 'Addresses',
     showConditions: bitcoinNetworks.concat(liquidNetworks)
   },
   {
-    type: "endpoint",
-    category: "addresses",
-    httpRequestMethod: "GET",
-    fragment: "get-address",
-    title: "GET Address",
+    type: 'endpoint',
+    category: 'addresses',
+    httpRequestMethod: 'GET',
+    fragment: 'get-address',
+    title: 'GET Address',
     description: {
-      default: "Returns details about an address. Available fields: <code>address</code>, <code>chain_stats</code>, and <code>mempool_stats</code>. <code>chain_stats</code> and <code>mempool_stats</code> each contain an object with <code>tx_count</code>, <code>funded_txo_count</code>, <code>funded_txo_sum</code>, <code>spent_txo_count</code>, and <code>spent_txo_sum</code>."
+      default: 'Returns details about an address. Available fields: <code>address</code>, <code>chain_stats</code>, and <code>mempool_stats</code>. <code>chain_stats</code> and <code>mempool_stats</code> each contain an object with <code>tx_count</code>, <code>funded_txo_count</code>, <code>funded_txo_sum</code>, <code>spent_txo_count</code>, and <code>spent_txo_sum</code>.'
     },
-    urlString: "/address/:address",
+    urlString: '/address/:address',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -448,15 +448,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "addresses",
-    httpRequestMethod: "GET",
-    fragment: "get-address-transactions",
-    title: "GET Address Transactions",
+    type: 'endpoint',
+    category: 'addresses',
+    httpRequestMethod: 'GET',
+    fragment: 'get-address-transactions',
+    title: 'GET Address Transactions',
     description: {
-      default: "Get transaction history for the specified address/scripthash, sorted with newest first. Returns up to 50 mempool transactions plus the first 25 confirmed transactions. You can request more confirmed transactions using an <code>after_txid</code> query parameter."
+      default: 'Get transaction history for the specified address/scripthash, sorted with newest first. Returns up to 50 mempool transactions plus the first 25 confirmed transactions. You can request more confirmed transactions using an <code>after_txid</code> query parameter.'
     },
-    urlString: "/address/:address/txs",
+    urlString: '/address/:address/txs',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -601,15 +601,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "addresses",
-    httpRequestMethod: "GET",
-    fragment: "get-address-transactions-chain",
-    title: "GET Address Transactions Chain",
+    type: 'endpoint',
+    category: 'addresses',
+    httpRequestMethod: 'GET',
+    fragment: 'get-address-transactions-chain',
+    title: 'GET Address Transactions Chain',
     description: {
-      default: "Get confirmed transaction history for the specified address/scripthash, sorted with newest first. Returns 25 transactions per page. More can be requested by specifying the last txid seen by the previous query."
+      default: 'Get confirmed transaction history for the specified address/scripthash, sorted with newest first. Returns 25 transactions per page. More can be requested by specifying the last txid seen by the previous query.'
     },
-    urlString: "/address/:address/txs/chain",
+    urlString: '/address/:address/txs/chain',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -754,15 +754,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "addresses",
-    httpRequestMethod: "GET",
-    fragment: "get-address-transactions-mempool",
-    title: "GET Address Transactions Mempool",
+    type: 'endpoint',
+    category: 'addresses',
+    httpRequestMethod: 'GET',
+    fragment: 'get-address-transactions-mempool',
+    title: 'GET Address Transactions Mempool',
     description: {
-      default: "Get unconfirmed transaction history for the specified address/scripthash. Returns up to 50 transactions (no paging)."
+      default: 'Get unconfirmed transaction history for the specified address/scripthash. Returns up to 50 transactions (no paging).'
     },
-    urlString: "/address/:address/txs/mempool",
+    urlString: '/address/:address/txs/mempool',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -879,16 +879,16 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "addresses",
-    httpRequestMethod: "GET",
-    fragment: "get-address-utxo",
-    title: "GET Address UTXO",
+    type: 'endpoint',
+    category: 'addresses',
+    httpRequestMethod: 'GET',
+    fragment: 'get-address-utxo',
+    title: 'GET Address UTXO',
     description: {
-      default: "Get the list of unspent transaction outputs associated with the address/scripthash. Available fields: <code>txid</code>, <code>vout</code>, <code>value</code>, and <code>status</code> (with the status of the funding tx).",
-      liquid: "Get the list of unspent transaction outputs associated with the address/scripthash. Available fields: <code>txid</code>, <code>vout</code>, <code>value</code>, and <code>status</code> (with the status of the funding tx). There is also a <code>valuecommitment</code> field that may appear in place of <code>value</code>, plus the following additional fields: <code>asset</code>/<code>assetcommitment</code>, <code>nonce</code>/<code>noncecommitment</code>, <code>surjection_proof</code>, and <code>range_proof</code>.",
+      default: 'Get the list of unspent transaction outputs associated with the address/scripthash. Available fields: <code>txid</code>, <code>vout</code>, <code>value</code>, and <code>status</code> (with the status of the funding tx).',
+      liquid: 'Get the list of unspent transaction outputs associated with the address/scripthash. Available fields: <code>txid</code>, <code>vout</code>, <code>value</code>, and <code>status</code> (with the status of the funding tx). There is also a <code>valuecommitment</code> field that may appear in place of <code>value</code>, plus the following additional fields: <code>asset</code>/<code>assetcommitment</code>, <code>nonce</code>/<code>noncecommitment</code>, <code>surjection_proof</code>, and <code>range_proof</code>.',
     },
-    urlString: "/address/:address/utxo",
+    urlString: '/address/:address/utxo',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1011,15 +1011,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "addresses",
-    httpRequestMethod: "GET",
-    fragment: "get-address-validate",
-    title: "GET Address Validation",
+    type: 'endpoint',
+    category: 'addresses',
+    httpRequestMethod: 'GET',
+    fragment: 'get-address-validate',
+    title: 'GET Address Validation',
     description: {
-      default: "Returns whether an address is valid or not. Available fields: <code>isvalid</code> (boolean), <code>address</code> (string), <code>scriptPubKey</code> (string), <code>isscript</code> (boolean), <code>iswitness</code> (boolean), <code>witness_version</code> (numeric, optional), and <code>witness_program</code> (string, optional).",
+      default: 'Returns whether an address is valid or not. Available fields: <code>isvalid</code> (boolean), <code>address</code> (string), <code>scriptPubKey</code> (string), <code>isscript</code> (boolean), <code>iswitness</code> (boolean), <code>witness_version</code> (numeric, optional), and <code>witness_program</code> (string, optional).',
     },
-    urlString: "/v1/validate-address/:address",
+    urlString: '/v1/validate-address/:address',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -1069,22 +1069,22 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "category",
-    category: "assets",
-    fragment: "assets",
-    title: "Assets",
+    type: 'category',
+    category: 'assets',
+    fragment: 'assets',
+    title: 'Assets',
     showConditions: liquidNetworks
   },
   {
-    type: "endpoint",
-    category: "assets",
-    httpRequestMethod: "GET",
-    fragment: "get-asset",
-    title: "GET Asset",
+    type: 'endpoint',
+    category: 'assets',
+    httpRequestMethod: 'GET',
+    fragment: 'get-asset',
+    title: 'GET Asset',
     description: {
-      default: "Returns information about a Liquid asset."
+      default: 'Returns information about a Liquid asset.'
     },
-    urlString: "/asset/:asset_id",
+    urlString: '/asset/:asset_id',
     showConditions: liquidNetworks,
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1176,15 +1176,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "assets",
-    httpRequestMethod: "GET",
-    fragment: "get-asset-transactions",
-    title: "GET Asset Transactions",
+    type: 'endpoint',
+    category: 'assets',
+    httpRequestMethod: 'GET',
+    fragment: 'get-asset-transactions',
+    title: 'GET Asset Transactions',
     description: {
-      default: "Returns transactions associated with the specified Liquid asset. For the network's native asset, returns a list of peg in, peg out, and burn transactions. For user-issued assets, returns a list of issuance, reissuance, and burn transactions. Does not include regular transactions transferring this asset."
+      default: 'Returns transactions associated with the specified Liquid asset. For the network\'s native asset, returns a list of peg in, peg out, and burn transactions. For user-issued assets, returns a list of issuance, reissuance, and burn transactions. Does not include regular transactions transferring this asset.'
     },
-    urlString: "/asset/:asset_id/txs[/mempool|/chain]",
+    urlString: '/asset/:asset_id/txs[/mempool|/chain]',
     showConditions: liquidNetworks,
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1262,15 +1262,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "assets",
-    httpRequestMethod: "GET",
-    fragment: "get-asset-supply",
-    title: "GET Asset Supply",
+    type: 'endpoint',
+    category: 'assets',
+    httpRequestMethod: 'GET',
+    fragment: 'get-asset-supply',
+    title: 'GET Asset Supply',
     description: {
-      default: "Get the current total supply of the specified asset. For the native asset (L-BTC), this is calculated as [chain,mempool]_stats.peg_in_amount - [chain,mempool]_stats.peg_out_amount - [chain,mempool]_stats.burned_amount. For issued assets, this is calculated as [chain,mempool]_stats.issued_amount - [chain,mempool]_stats.burned_amount. Not available for assets with blinded issuances. If /decimal is specified, returns the supply as a decimal according to the asset's divisibility. Otherwise, returned in base units."
+      default: 'Get the current total supply of the specified asset. For the native asset (L-BTC), this is calculated as [chain,mempool]_stats.peg_in_amount - [chain,mempool]_stats.peg_out_amount - [chain,mempool]_stats.burned_amount. For issued assets, this is calculated as [chain,mempool]_stats.issued_amount - [chain,mempool]_stats.burned_amount. Not available for assets with blinded issuances. If /decimal is specified, returns the supply as a decimal according to the asset\'s divisibility. Otherwise, returned in base units.'
     },
-    urlString: "/asset/:asset_id/supply[/decimal]",
+    urlString: '/asset/:asset_id/supply[/decimal]',
     showConditions: liquidNetworks,
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1312,15 +1312,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "assets",
-    httpRequestMethod: "GET",
-    fragment: "get-asset-icons",
-    title: "GET Asset Icons",
+    type: 'endpoint',
+    category: 'assets',
+    httpRequestMethod: 'GET',
+    fragment: 'get-asset-icons',
+    title: 'GET Asset Icons',
     description: {
-      default: "Get all the Asset IDs that have icons."
+      default: 'Get all the Asset IDs that have icons.'
     },
-    urlString: "/v1/assets/icons",
+    urlString: '/v1/assets/icons',
     showConditions: liquidNetworks,
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1353,15 +1353,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "assets",
-    httpRequestMethod: "GET",
-    fragment: "get-asset-icon",
-    title: "GET Asset Icon",
+    type: 'endpoint',
+    category: 'assets',
+    httpRequestMethod: 'GET',
+    fragment: 'get-asset-icon',
+    title: 'GET Asset Icon',
     description: {
-      default: "Get the icon of the specified asset."
+      default: 'Get the icon of the specified asset.'
     },
-    urlString: "/v1/asset/:asset_id/icon",
+    urlString: '/v1/asset/:asset_id/icon',
     showConditions: liquidNetworks,
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1387,23 +1387,23 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "category",
-    category: "blocks",
-    fragment: "blocks",
-    title: "Blocks",
+    type: 'category',
+    category: 'blocks',
+    fragment: 'blocks',
+    title: 'Blocks',
     showConditions: bitcoinNetworks.concat(liquidNetworks)
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block",
-    title: "GET Block",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block',
+    title: 'GET Block',
     description: {
-      default: "Returns details about a block.",
-      liquid: "Returns details about a block. Available fields: <code>id</code>, <code>height</code>, <code>version</code>, <code>timestamp</code>, <code>bits</code>, <code>nonce</code>, <code>merkle_root</code>, <code>tx_count</code>, <code>size</code>, <code>weight</code>,<code>proof</code>, and <code>previousblockhash</code>."
+      default: 'Returns details about a block.',
+      liquid: 'Returns details about a block. Available fields: <code>id</code>, <code>height</code>, <code>version</code>, <code>timestamp</code>, <code>bits</code>, <code>nonce</code>, <code>merkle_root</code>, <code>tx_count</code>, <code>size</code>, <code>weight</code>,<code>proof</code>, and <code>previousblockhash</code>.'
     },
-    urlString: "/block/:hash",
+    urlString: '/block/:hash',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1564,15 +1564,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block-header",
-    title: "GET Block Header",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-header',
+    title: 'GET Block Header',
     description: {
-      default: "Returns the hex-encoded block header."
+      default: 'Returns the hex-encoded block header.'
     },
-    urlString: "/block/:hash/header",
+    urlString: '/block/:hash/header',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1629,15 +1629,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block-height",
-    title: "GET Block Height",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-height',
+    title: 'GET Block Height',
     description: {
-      default: "Returns the hash of the block currently at <code>:height</code>."
+      default: 'Returns the hash of the block currently at <code>:height</code>.'
     },
-    urlString: "/block-height/:height",
+    urlString: '/block-height/:height',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1691,15 +1691,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block-timestamp",
-    title: "GET Block Timestamp",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-timestamp',
+    title: 'GET Block Timestamp',
     description: {
-      default: "Returns the height and the hash of the block closest to the given <code>:timestamp</code>."
+      default: 'Returns the height and the hash of the block closest to the given <code>:timestamp</code>.'
     },
-    urlString: "/v1/mining/blocks/timestamp/:timestamp",
+    urlString: '/v1/mining/blocks/timestamp/:timestamp',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -1745,15 +1745,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block-raw",
-    title: "GET Block Raw",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-raw',
+    title: 'GET Block Raw',
     description: {
-      default: "Returns the raw block representation in binary."
+      default: 'Returns the raw block representation in binary.'
     },
-    urlString: "/block/:hash/raw",
+    urlString: '/block/:hash/raw',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1810,15 +1810,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block-status",
-    title: "GET Block Status",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-status',
+    title: 'GET Block Status',
     description: {
-      default: "Returns the confirmation status of a block. Available fields: <code>in_best_chain</code> (boolean, false for orphaned blocks), <code>next_best</code> (the hash of the next block, only available for blocks in the best chain)."
+      default: 'Returns the confirmation status of a block. Available fields: <code>in_best_chain</code> (boolean, false for orphaned blocks), <code>next_best</code> (the hash of the next block, only available for blocks in the best chain).'
     },
-    urlString: "/block/:hash/status",
+    urlString: '/block/:hash/status',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1895,15 +1895,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block-tip-height",
-    title: "GET Block Tip Height",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-tip-height',
+    title: 'GET Block Tip Height',
     description: {
-      default: "Returns the height of the last block."
+      default: 'Returns the height of the last block.'
     },
-    urlString: "/blocks/tip/height",
+    urlString: '/blocks/tip/height',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -1958,15 +1958,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block-tip-hash",
-    title: "GET Block Tip Hash",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-tip-hash',
+    title: 'GET Block Tip Hash',
     description: {
-      default: "Returns the hash of the last block."
+      default: 'Returns the hash of the last block.'
     },
-    urlString: "/blocks/tip/hash",
+    urlString: '/blocks/tip/hash',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -2021,15 +2021,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block-transaction-id",
-    title: "GET Block Transaction ID",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-transaction-id',
+    title: 'GET Block Transaction ID',
     description: {
-      default: "Returns the transaction at index <code>:index</code> within the specified block."
+      default: 'Returns the transaction at index <code>:index</code> within the specified block.'
     },
-    urlString: "/block/:hash/txid/:index",
+    urlString: '/block/:hash/txid/:index',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -2086,15 +2086,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block-transaction-ids",
-    title: "GET Block Transaction IDs",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-transaction-ids',
+    title: 'GET Block Transaction IDs',
     description: {
-      default: "Returns a list of all txids in the block."
+      default: 'Returns a list of all txids in the block.'
     },
-    urlString: "/block/:hash/txids",
+    urlString: '/block/:hash/txids',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -2180,15 +2180,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-block-transactions",
-    title: "GET Block Transactions",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-transactions',
+    title: 'GET Block Transactions',
     description: {
-      default: "Returns a list of transactions in the block (up to 25 transactions beginning at <code>start_index</code>). Transactions returned here do not have the <code>status</code> field, since all the transactions share the same block and confirmation status."
+      default: 'Returns a list of transactions in the block (up to 25 transactions beginning at <code>start_index</code>). Transactions returned here do not have the <code>status</code> field, since all the transactions share the same block and confirmation status.'
     },
-    urlString: "/block/:hash/txs[/:start_index]",
+    urlString: '/block/:hash/txs[/:start_index]',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -2335,15 +2335,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-blocks",
-    title: "GET Blocks",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-blocks',
+    title: 'GET Blocks',
     description: {
-      default: "Returns details on the past 15 blocks with fee and mining details in an <code>extras</code> field. If <code>:startHeight</code> is specified, the past 15 blocks before (and including) <code>:startHeight</code> are returned."
+      default: 'Returns details on the past 15 blocks with fee and mining details in an <code>extras</code> field. If <code>:startHeight</code> is specified, the past 15 blocks before (and including) <code>:startHeight</code> are returned.'
     },
-    urlString: "/v1/blocks[/:startHeight]",
+    urlString: '/v1/blocks[/:startHeight]',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -2538,15 +2538,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-blocks-bulk",
-    title: "GET Blocks (Bulk)",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-blocks-bulk',
+    title: 'GET Blocks (Bulk)',
     description: {
-      default: "<p>Returns details on the range of blocks between <code>:minHeight</code> and <code>:maxHeight</code>, inclusive, up to 10 blocks. If <code>:maxHeight</code> is not specified, it defaults to the current tip.</p><p>To return data for more than 10 blocks, consider becoming an <a href='https://mempool.space/enterprise'>enterprise sponsor</a>.</p>"
+      default: '<p>Returns details on the range of blocks between <code>:minHeight</code> and <code>:maxHeight</code>, inclusive, up to 10 blocks. If <code>:maxHeight</code> is not specified, it defaults to the current tip.</p><p>To return data for more than 10 blocks, consider becoming an <a href=\'https://mempool.space/enterprise\'>enterprise sponsor</a>.</p>'
     },
-    urlString: "/v1/blocks-bulk/:minHeight[/:maxHeight]",
+    urlString: '/v1/blocks-bulk/:minHeight[/:maxHeight]',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -2750,15 +2750,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "blocks",
-    httpRequestMethod: "GET",
-    fragment: "get-blocks",
-    title: "GET Blocks",
+    type: 'endpoint',
+    category: 'blocks',
+    httpRequestMethod: 'GET',
+    fragment: 'get-blocks',
+    title: 'GET Blocks',
     description: {
-      default: "Returns details on the past 10 blocks with fee and mining details in an <code>extras</code> field. If <code>:startHeight</code> is specified, the past 10 blocks before (and including) <code>:startHeight</code> are returned."
+      default: 'Returns details on the past 10 blocks with fee and mining details in an <code>extras</code> field. If <code>:startHeight</code> is specified, the past 10 blocks before (and including) <code>:startHeight</code> are returned.'
     },
-    urlString: "/blocks[/:startHeight]",
+    urlString: '/blocks[/:startHeight]',
     showConditions: liquidNetworks,
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -2826,22 +2826,22 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "category",
-    category: "mining",
-    fragment: "mining",
-    title: "Mining",
+    type: 'category',
+    category: 'mining',
+    fragment: 'mining',
+    title: 'Mining',
     showConditions: bitcoinNetworks
   },
  {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-mining-pools",
-    title: "GET Mining Pools",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mining-pools',
+    title: 'GET Mining Pools',
     description: {
-      default: "Returns a list of all known mining pools ordered by blocks found over the specified trailing <code>:timePeriod</code>.</p><p>Leave <code>:timePeriod</code> unspecified to get all available data, or specify one of the following values: " + miningTimeIntervals + "."
+      default: 'Returns a list of all known mining pools ordered by blocks found over the specified trailing <code>:timePeriod</code>.</p><p>Leave <code>:timePeriod</code> unspecified to get all available data, or specify one of the following values: ' + miningTimeIntervals + '.'
     },
-    urlString: "/v1/mining/pools[/:timePeriod]",
+    urlString: '/v1/mining/pools[/:timePeriod]',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -2931,15 +2931,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-mining-pool",
-    title: "GET Mining Pool",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mining-pool',
+    title: 'GET Mining Pool',
     description: {
-      default: "<p>Returns details about the mining pool specified by <code>:slug</code>.</p>"
+      default: '<p>Returns details about the mining pool specified by <code>:slug</code>.</p>'
     },
-    urlString: "/v1/mining/pool/:slug",
+    urlString: '/v1/mining/pool/:slug',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -3023,15 +3023,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-mining-pool-hashrates",
-    title: "GET Mining Pool Hashrates",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mining-pool-hashrates',
+    title: 'GET Mining Pool Hashrates',
     description: {
-      default: "<p>Returns average hashrates (and share of total hashrate) of mining pools active in the specified trailing <code>:timePeriod</code>, in descending order of hashrate.</p><p>Leave <code>:timePeriod</code> unspecified to get all available data, or specify any of the following time periods: " + miningTimeIntervals.substr(52) + ".</p>"
+      default: '<p>Returns average hashrates (and share of total hashrate) of mining pools active in the specified trailing <code>:timePeriod</code>, in descending order of hashrate.</p><p>Leave <code>:timePeriod</code> unspecified to get all available data, or specify any of the following time periods: ' + miningTimeIntervals.substr(52) + '.</p>'
     },
-    urlString: "/v1/mining/hashrate/pools/[:timePeriod]",
+    urlString: '/v1/mining/hashrate/pools/[:timePeriod]',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -3129,15 +3129,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-mining-pool-hashrate",
-    title: "GET Mining Pool Hashrate",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mining-pool-hashrate',
+    title: 'GET Mining Pool Hashrate',
     description: {
-      default: "Returns all known hashrate data for the mining pool specified by <code>:slug</code>. Hashrate values are weekly averages."
+      default: 'Returns all known hashrate data for the mining pool specified by <code>:slug</code>. Hashrate values are weekly averages.'
     },
-    urlString: "/v1/mining/pool/:slug/hashrate",
+    urlString: '/v1/mining/pool/:slug/hashrate',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -3249,15 +3249,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-mining-pool-blocks",
-    title: "GET Mining Pool Blocks",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mining-pool-blocks',
+    title: 'GET Mining Pool Blocks',
     description: {
-      default: "Returns past 10 blocks mined by the specified mining pool (<code>:slug</code>) before the specified <code>:blockHeight</code>. If no <code>:blockHeight</code> is specified, the mining pool's 10 most recent blocks are returned."
+      default: 'Returns past 10 blocks mined by the specified mining pool (<code>:slug</code>) before the specified <code>:blockHeight</code>. If no <code>:blockHeight</code> is specified, the mining pool\'s 10 most recent blocks are returned.'
     },
-    urlString: "/v1/mining/pool/:slug/blocks/[:blockHeight]",
+    urlString: '/v1/mining/pool/:slug/blocks/[:blockHeight]',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -3458,15 +3458,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-hashrate",
-    title: "GET Hashrate",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-hashrate',
+    title: 'GET Hashrate',
     description: {
-      default: "<p>Returns network-wide hashrate and difficulty figures over the specified trailing <code>:timePeriod</code>:</p><ul><li>Current (real-time) hashrate</li><li>Current (real-time) difficulty</li><li>Historical daily average hashrates</li><li>Historical difficulty</li></ul><p>Valid values for <code>:timePeriod</code> are " + miningTimeIntervals.substr(52) + ". If no time interval is specified, all available data is returned.</p><p>Be sure that <code>INDEXING_BLOCKS_AMOUNT</code> is set properly in your backend config so that enough blocks are indexed to properly serve your request.</p>"
+      default: '<p>Returns network-wide hashrate and difficulty figures over the specified trailing <code>:timePeriod</code>:</p><ul><li>Current (real-time) hashrate</li><li>Current (real-time) difficulty</li><li>Historical daily average hashrates</li><li>Historical difficulty</li></ul><p>Valid values for <code>:timePeriod</code> are ' + miningTimeIntervals.substr(52) + '. If no time interval is specified, all available data is returned.</p><p>Be sure that <code>INDEXING_BLOCKS_AMOUNT</code> is set properly in your backend config so that enough blocks are indexed to properly serve your request.</p>'
     },
-    urlString: "/v1/mining/hashrate/[:timePeriod]",
+    urlString: '/v1/mining/hashrate/[:timePeriod]',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -3577,15 +3577,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-difficulty-adjustments",
-    title: "GET Difficulty Adjustments",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-difficulty-adjustments',
+    title: 'GET Difficulty Adjustments',
     description: {
-      default: "<p>Returns the record of difficulty adjustments over the specified trailing <code>:interval</code>:</p><ul><li>Block timestamp</li><li>Block height</li><li>Difficulty</li><li>Difficulty change</li></ul><p>If no time interval is specified, all available data is returned."
+      default: '<p>Returns the record of difficulty adjustments over the specified trailing <code>:interval</code>:</p><ul><li>Block timestamp</li><li>Block height</li><li>Difficulty</li><li>Difficulty change</li></ul><p>If no time interval is specified, all available data is returned.'
     },
-    urlString: "/v1/mining/difficulty-adjustments/[:interval]",
+    urlString: '/v1/mining/difficulty-adjustments/[:interval]',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -3671,15 +3671,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-reward-stats",
-    title: "GET Reward Stats",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-reward-stats',
+    title: 'GET Reward Stats',
     description: {
-      default: "Returns block reward and total transactions confirmed for the past <code>:blockCount</code> blocks."
+      default: 'Returns block reward and total transactions confirmed for the past <code>:blockCount</code> blocks.'
     },
-    urlString: "/v1/mining/reward-stats/:blockCount",
+    urlString: '/v1/mining/reward-stats/:blockCount',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -3731,15 +3731,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-block-fees",
-    title: "GET Block Fees",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-fees',
+    title: 'GET Block Fees',
     description: {
-      default: "<p>Returns average total fees for blocks in the specified <code>:timePeriod</code>, ordered oldest to newest. <code>:timePeriod</code> can be any of the following: " + miningTimeIntervals + ".</p><p>For <code>24h</code> and <code>3d</code> time periods, every block is included and fee amounts are exact (not averages). For the <code>1w</code> time period, fees may be averages depending on how fast blocks were found around a particular timestamp. For other time periods, fees are averages.</p>"
+      default: '<p>Returns average total fees for blocks in the specified <code>:timePeriod</code>, ordered oldest to newest. <code>:timePeriod</code> can be any of the following: ' + miningTimeIntervals + '.</p><p>For <code>24h</code> and <code>3d</code> time periods, every block is included and fee amounts are exact (not averages). For the <code>1w</code> time period, fees may be averages depending on how fast blocks were found around a particular timestamp. For other time periods, fees are averages.</p>'
     },
-    urlString: "/v1/mining/blocks/fees/:timePeriod",
+    urlString: '/v1/mining/blocks/fees/:timePeriod',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -3829,15 +3829,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-block-rewards",
-    title: "GET Block Rewards",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-rewards',
+    title: 'GET Block Rewards',
     description: {
-      default: "<p>Returns average block rewards for blocks in the specified <code>:timePeriod</code>, ordered oldest to newest. <code>:timePeriod</code> can be any of the following: " + miningTimeIntervals + ".</p><p>For <code>24h</code> and <code>3d</code> time periods, every block is included and block rewards are exact (not averages). For the <code>1w</code> time period, block rewards may be averages depending on how fast blocks were found around a particular timestamp. For other time periods, block rewards are averages.</p>"
+      default: '<p>Returns average block rewards for blocks in the specified <code>:timePeriod</code>, ordered oldest to newest. <code>:timePeriod</code> can be any of the following: ' + miningTimeIntervals + '.</p><p>For <code>24h</code> and <code>3d</code> time periods, every block is included and block rewards are exact (not averages). For the <code>1w</code> time period, block rewards may be averages depending on how fast blocks were found around a particular timestamp. For other time periods, block rewards are averages.</p>'
     },
-    urlString: "/v1/mining/blocks/rewards/:timePeriod",
+    urlString: '/v1/mining/blocks/rewards/:timePeriod',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -3922,15 +3922,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-block-feerates",
-    title: "GET Block Feerates",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-feerates',
+    title: 'GET Block Feerates',
     description: {
-      default: "Returns average feerate percentiles for blocks in the specified <code>:timePeriod</code>, ordered oldest to newest. <code>:timePeriod</code> can be any of the following: " + miningTimeIntervals + ".</p><p>For <code>24h</code> and <code>3d</code> time periods, every block is included and percentiles are exact (not averages). For the <code>1w</code> time period, percentiles may be averages depending on how fast blocks were found around a particular timestamp. For other time periods, percentiles are averages."
+      default: 'Returns average feerate percentiles for blocks in the specified <code>:timePeriod</code>, ordered oldest to newest. <code>:timePeriod</code> can be any of the following: ' + miningTimeIntervals + '.</p><p>For <code>24h</code> and <code>3d</code> time periods, every block is included and percentiles are exact (not averages). For the <code>1w</code> time period, percentiles may be averages depending on how fast blocks were found around a particular timestamp. For other time periods, percentiles are averages.'
     },
-    urlString: "/v1/mining/blocks/fee-rates/:timePeriod",
+    urlString: '/v1/mining/blocks/fee-rates/:timePeriod',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -4048,15 +4048,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-sizes-weights",
-    title: "GET Block Sizes and Weights",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-sizes-weights',
+    title: 'GET Block Sizes and Weights',
     description: {
-      default: "<p>Returns average size (bytes) and average weight (weight units) for blocks in the specified <code>:timePeriod</code>, ordered oldest to newest. <code>:timePeriod</code> can be any of the following: " + miningTimeIntervals + ".</p><p>For <code>24h</code> and <code>3d</code> time periods, every block is included and figures are exact (not averages). For the <code>1w</code> time period, figures may be averages depending on how fast blocks were found around a particular timestamp. For other time periods, figures are averages.</p>"
+      default: '<p>Returns average size (bytes) and average weight (weight units) for blocks in the specified <code>:timePeriod</code>, ordered oldest to newest. <code>:timePeriod</code> can be any of the following: ' + miningTimeIntervals + '.</p><p>For <code>24h</code> and <code>3d</code> time periods, every block is included and figures are exact (not averages). For the <code>1w</code> time period, figures may be averages depending on how fast blocks were found around a particular timestamp. For other time periods, figures are averages.</p>'
     },
-    urlString: "/v1/mining/blocks/sizes-weights/:timePeriod",
+    urlString: '/v1/mining/blocks/sizes-weights/:timePeriod',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -4191,15 +4191,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-block-predictions",
-    title: "GET Block Predictions",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-predictions',
+    title: 'GET Block Predictions',
     description: {
-      default: "<p>Returns average block health in the specified <code>:timePeriod</code>, ordered oldest to newest. <code>:timePeriod</code> can be any of the following: " + miningTimeIntervals + ".</p><p>For <code>24h</code> and <code>3d</code> time periods, every block is included and figures are exact (not averages). For the <code>1w</code> time period, figures may be averages depending on how fast blocks were found around a particular timestamp. For other time periods, figures are averages.</p>"
+      default: '<p>Returns average block health in the specified <code>:timePeriod</code>, ordered oldest to newest. <code>:timePeriod</code> can be any of the following: ' + miningTimeIntervals + '.</p><p>For <code>24h</code> and <code>3d</code> time periods, every block is included and figures are exact (not averages). For the <code>1w</code> time period, figures may be averages depending on how fast blocks were found around a particular timestamp. For other time periods, figures are averages.</p>'
     },
-    urlString: ["/v1/mining/blocks/predictions/:timePeriod"],
+    urlString: ['/v1/mining/blocks/predictions/:timePeriod'],
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -4299,15 +4299,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-block-audit-score",
-    title: "GET Block Audit Score",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-audit-score',
+    title: 'GET Block Audit Score',
     description: {
-      default: "Returns the block audit score for the specified <code>:blockHash</code>. Available fields: <code>hash</code>, <code>matchRate</code>, <code>expectedFees</code>, and <code>expectedWeight</code>."
+      default: 'Returns the block audit score for the specified <code>:blockHash</code>. Available fields: <code>hash</code>, <code>matchRate</code>, <code>expectedFees</code>, and <code>expectedWeight</code>.'
     },
-    urlString: ["/v1/mining/blocks/audit/score/:blockHash"],
+    urlString: ['/v1/mining/blocks/audit/score/:blockHash'],
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -4356,15 +4356,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-blocks-audit-scores",
-    title: "GET Blocks Audit Scores",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-blocks-audit-scores',
+    title: 'GET Blocks Audit Scores',
     description: {
-      default: "Returns blocks audit score for the past 16 blocks. If <code>:startHeight</code> is specified, the past 15 blocks before (and including) <code>:startHeight</code> are returned. Available fields: <code>hash</code>, <code>matchRate</code>, <code>expectedFees</code>, and <code>expectedWeight</code>."
+      default: 'Returns blocks audit score for the past 16 blocks. If <code>:startHeight</code> is specified, the past 15 blocks before (and including) <code>:startHeight</code> are returned. Available fields: <code>hash</code>, <code>matchRate</code>, <code>expectedFees</code>, and <code>expectedWeight</code>.'
     },
-    urlString: ["/v1/mining/blocks/audit/scores/:startHeight"],
+    urlString: ['/v1/mining/blocks/audit/scores/:startHeight'],
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -4440,15 +4440,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mining",
-    httpRequestMethod: "GET",
-    fragment: "get-block-audit-summary",
-    title: "GET Block Audit Summary",
+    type: 'endpoint',
+    category: 'mining',
+    httpRequestMethod: 'GET',
+    fragment: 'get-block-audit-summary',
+    title: 'GET Block Audit Summary',
     description: {
-      default: "Returns the block audit summary for the specified <code>:blockHash</code>. Available fields: <code>height</code>, <code>id</code>, <code>timestamp</code>, <code>template</code>, <code>missingTxs</code>, <code>addedTxs</code>, <code>freshTxs</code>, <code>sigopTxs</code>, <code>fullrbfTxs</code>, <code>acceleratedTxs</code>, <code>matchRate</code>, <code>expectedFees</code>, and <code>expectedWeight</code>."
+      default: 'Returns the block audit summary for the specified <code>:blockHash</code>. Available fields: <code>height</code>, <code>id</code>, <code>timestamp</code>, <code>template</code>, <code>missingTxs</code>, <code>addedTxs</code>, <code>freshTxs</code>, <code>sigopTxs</code>, <code>fullrbfTxs</code>, <code>acceleratedTxs</code>, <code>matchRate</code>, <code>expectedFees</code>, and <code>expectedWeight</code>.'
     },
-    urlString: ["/v1/block/:blockHash/audit-summary"],
+    urlString: ['/v1/block/:blockHash/audit-summary'],
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -4588,22 +4588,22 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "category",
-    category: "fees",
-    fragment: "fees",
-    title: "Fees",
+    type: 'category',
+    category: 'fees',
+    fragment: 'fees',
+    title: 'Fees',
     showConditions: bitcoinNetworks.concat(liquidNetworks)
   },
   {
-    type: "endpoint",
-    category: "fees",
-    httpRequestMethod: "GET",
-    fragment: "get-mempool-blocks-fees",
-    title: "GET Mempool Blocks Fees",
+    type: 'endpoint',
+    category: 'fees',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mempool-blocks-fees',
+    title: 'GET Mempool Blocks Fees',
     description: {
-      default: "Returns current mempool as projected blocks."
+      default: 'Returns current mempool as projected blocks.'
     },
-    urlString: "/v1/fees/mempool-blocks",
+    urlString: '/v1/fees/mempool-blocks',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -4748,15 +4748,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "fees",
-    httpRequestMethod: "GET",
-    fragment: "get-recommended-fees",
-    title: "GET Recommended Fees",
+    type: 'endpoint',
+    category: 'fees',
+    httpRequestMethod: 'GET',
+    fragment: 'get-recommended-fees',
+    title: 'GET Recommended Fees',
     description: {
-      default: "Returns our currently suggested fees for new transactions."
+      default: 'Returns our currently suggested fees for new transactions.'
     },
-    urlString: "/v1/fees/recommended",
+    urlString: '/v1/fees/recommended',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -4841,22 +4841,22 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "category",
-    category: "mempool",
-    fragment: "mempool",
-    title: "Mempool",
+    type: 'category',
+    category: 'mempool',
+    fragment: 'mempool',
+    title: 'Mempool',
     showConditions: bitcoinNetworks.concat(liquidNetworks)
   },
   {
-    type: "endpoint",
-    category: "mempool",
-    httpRequestMethod: "GET",
-    fragment: "get-mempool",
-    title: "GET Mempool",
+    type: 'endpoint',
+    category: 'mempool',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mempool',
+    title: 'GET Mempool',
     description: {
-      default: "Returns current mempool backlog statistics."
+      default: 'Returns current mempool backlog statistics.'
     },
-    urlString: "/mempool",
+    urlString: '/mempool',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -4951,15 +4951,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mempool",
-    httpRequestMethod: "GET",
-    fragment: "get-mempool-transaction-ids",
-    title: "GET Mempool Transaction IDs",
+    type: 'endpoint',
+    category: 'mempool',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mempool-transaction-ids',
+    title: 'GET Mempool Transaction IDs',
     description: {
-      default: "Get the full list of txids in the mempool as an array. The order of the txids is arbitrary and does not match bitcoind."
+      default: 'Get the full list of txids in the mempool as an array. The order of the txids is arbitrary and does not match bitcoind.'
     },
-    urlString: "/mempool/txids",
+    urlString: '/mempool/txids',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -5037,15 +5037,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mempool",
-    httpRequestMethod: "GET",
-    fragment: "get-mempool-recent",
-    title: "GET Mempool Recent",
+    type: 'endpoint',
+    category: 'mempool',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mempool-recent',
+    title: 'GET Mempool Recent',
     description: {
-      default: "Get a list of the last 10 transactions to enter the mempool. Each transaction object contains simplified overview data, with the following fields: <code>txid</code>, <code>fee</code>, <code>vsize</code>, and <code>value</code>."
+      default: 'Get a list of the last 10 transactions to enter the mempool. Each transaction object contains simplified overview data, with the following fields: <code>txid</code>, <code>fee</code>, <code>vsize</code>, and <code>value</code>.'
     },
-    urlString: "/mempool/recent",
+    urlString: '/mempool/recent',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -5143,15 +5143,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mempool",
-    httpRequestMethod: "GET",
-    fragment: "get-mempool-rbf",
-    title: "GET Mempool RBF Transactions",
+    type: 'endpoint',
+    category: 'mempool',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mempool-rbf',
+    title: 'GET Mempool RBF Transactions',
     description: {
-      default: "Returns the list of mempool transactions that are part of a RBF chain."
+      default: 'Returns the list of mempool transactions that are part of a RBF chain.'
     },
-    urlString: "/v1/replacements",
+    urlString: '/v1/replacements',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -5273,15 +5273,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "mempool",
-    httpRequestMethod: "GET",
-    fragment: "get-mempool-fullrbf",
-    title: "GET Mempool Full RBF Transactions",
+    type: 'endpoint',
+    category: 'mempool',
+    httpRequestMethod: 'GET',
+    fragment: 'get-mempool-fullrbf',
+    title: 'GET Mempool Full RBF Transactions',
     description: {
-      default: "Returns the list of mempool transactions that are part of a Full-RBF chain."
+      default: 'Returns the list of mempool transactions that are part of a Full-RBF chain.'
     },
-    urlString: "/v1/fullrbf/replacements",
+    urlString: '/v1/fullrbf/replacements',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -5402,22 +5402,22 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "category",
-    category: "transactions",
-    fragment: "transactions",
-    title: "Transactions",
+    type: 'category',
+    category: 'transactions',
+    fragment: 'transactions',
+    title: 'Transactions',
     showConditions: bitcoinNetworks.concat(liquidNetworks)
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-cpfp",
-    title: "GET Children Pay for Parent",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-cpfp',
+    title: 'GET Children Pay for Parent',
     description: {
-      default: "Returns the ancestors and the best descendant fees for a transaction."
+      default: 'Returns the ancestors and the best descendant fees for a transaction.'
     },
-    urlString: "/v1/cpfp",
+    urlString: '/v1/cpfp',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -5474,15 +5474,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-transaction",
-    title: "GET Transaction",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-transaction',
+    title: 'GET Transaction',
     description: {
-      default: "Returns details about a transaction. Available fields: <code>txid</code>, <code>version</code>, <code>locktime</code>, <code>size</code>, <code>weight</code>, <code>fee</code>, <code>vin</code>, <code>vout</code>, and <code>status</code>."
+      default: 'Returns details about a transaction. Available fields: <code>txid</code>, <code>version</code>, <code>locktime</code>, <code>size</code>, <code>weight</code>, <code>fee</code>, <code>vin</code>, <code>vout</code>, and <code>status</code>.'
     },
-    urlString: "/tx/:txid",
+    urlString: '/tx/:txid',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -5614,15 +5614,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-transaction-hex",
-    title: "GET Transaction Hex",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-transaction-hex',
+    title: 'GET Transaction Hex',
     description: {
-      default: "Returns a transaction serialized as hex."
+      default: 'Returns a transaction serialized as hex.'
     },
-    urlString: "/tx/:txid/hex",
+    urlString: '/tx/:txid/hex',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -5679,15 +5679,15 @@ export const restApiDocsData = [
     },
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-transaction-merkleblock-proof",
-    title: "GET Transaction Merkleblock Proof",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-transaction-merkleblock-proof',
+    title: 'GET Transaction Merkleblock Proof',
     description: {
-      default: "Returns a merkle inclusion proof for the transaction using <a href='https://bitcoin.org/en/glossary/merkle-block'>bitcoind's merkleblock</a> format."
+      default: 'Returns a merkle inclusion proof for the transaction using <a href=\'https://bitcoin.org/en/glossary/merkle-block\'>bitcoind\'s merkleblock</a> format.'
     },
-    urlString: "/tx/:txid/merkleblock-proof",
+    urlString: '/tx/:txid/merkleblock-proof',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -5734,15 +5734,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-transaction-merkle-proof",
-    title: "GET Transaction Merkle Proof",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-transaction-merkle-proof',
+    title: 'GET Transaction Merkle Proof',
     description: {
-      default: "Returns a merkle inclusion proof for the transaction using <a href='https://electrumx.readthedocs.io/en/latest/protocol-methods.html#blockchain-transaction-get-merkle'>Electrum's blockchain.transaction.get_merkle format."
+      default: 'Returns a merkle inclusion proof for the transaction using <a href=\'https://electrumx.readthedocs.io/en/latest/protocol-methods.html#blockchain-transaction-get-merkle\'>Electrum\'s blockchain.transaction.get_merkle format.'
     },
-    urlString: "/tx/:txid/merkle-proof",
+    urlString: '/tx/:txid/merkle-proof',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -5851,15 +5851,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-transaction-outspend",
-    title: "GET Transaction Outspend",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-transaction-outspend',
+    title: 'GET Transaction Outspend',
     description: {
-      default: "Returns the spending status of a transaction output. Available fields: <code>spent</code> (boolean), <code>txid</code> (optional), <code>vin</code> (optional), and <code>status</code> (optional, the status of the spending tx)."
+      default: 'Returns the spending status of a transaction output. Available fields: <code>spent</code> (boolean), <code>txid</code> (optional), <code>vin</code> (optional), and <code>status</code> (optional, the status of the spending tx).'
     },
-    urlString: "/tx/:txid/outspend/:vout",
+    urlString: '/tx/:txid/outspend/:vout',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -5972,15 +5972,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-transaction-outspends",
-    title: "GET Transaction Outspends",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-transaction-outspends',
+    title: 'GET Transaction Outspends',
     description: {
-      default: "Returns the spending status of all transaction outputs."
+      default: 'Returns the spending status of all transaction outputs.'
     },
-    urlString: "/tx/:txid/outspends",
+    urlString: '/tx/:txid/outspends',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -6108,15 +6108,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-transaction-raw",
-    title: "GET Transaction Raw",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-transaction-raw',
+    title: 'GET Transaction Raw',
     description: {
-      default: "Returns a transaction as binary data."
+      default: 'Returns a transaction as binary data.'
     },
-    urlString: "/tx/:txid/raw",
+    urlString: '/tx/:txid/raw',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -6173,15 +6173,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-transaction-rbf-timeline",
-    title: "GET Transaction RBF Timeline",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-transaction-rbf-timeline',
+    title: 'GET Transaction RBF Timeline',
     description: {
-      default: "Returns the RBF tree timeline of a transaction."
+      default: 'Returns the RBF tree timeline of a transaction.'
     },
-    urlString: "v1/tx/:txId/rbf",
+    urlString: 'v1/tx/:txId/rbf',
     showConditions: bitcoinNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -6314,15 +6314,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-transaction-status",
-    title: "GET Transaction Status",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-transaction-status',
+    title: 'GET Transaction Status',
     description: {
-      default: "Returns the confirmation status of a transaction. Available fields: <code>confirmed</code> (boolean), <code>block_height</code> (optional), and <code>block_hash</code> (optional)."
+      default: 'Returns the confirmation status of a transaction. Available fields: <code>confirmed</code> (boolean), <code>block_height</code> (optional), and <code>block_hash</code> (optional).'
     },
-    urlString: "/tx/:txid/status",
+    urlString: '/tx/:txid/status',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -6401,15 +6401,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "GET",
-    fragment: "get-transaction-times",
-    title: "GET Transaction Times",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'GET',
+    fragment: 'get-transaction-times',
+    title: 'GET Transaction Times',
     description: {
-      default: "Returns the timestamps when a list of unconfirmed transactions was initially observed in the mempool. If a transaction is not found in the mempool or has been mined, the timestamp will be <code>0</code>."
+      default: 'Returns the timestamps when a list of unconfirmed transactions was initially observed in the mempool. If a transaction is not found in the mempool or has been mined, the timestamp will be <code>0</code>.'
     },
-    urlString: "/v1/transaction-times",
+    urlString: '/v1/transaction-times',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -6443,15 +6443,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "transactions",
-    httpRequestMethod: "POST",
-    fragment: "post-transaction",
-    title: "POST Transaction",
+    type: 'endpoint',
+    category: 'transactions',
+    httpRequestMethod: 'POST',
+    fragment: 'post-transaction',
+    title: 'POST Transaction',
     description: {
-      default: "Broadcast a raw transaction to the network. The transaction should be provided as hex in the request body. The <code>txid</code> will be returned on success."
+      default: 'Broadcast a raw transaction to the network. The transaction should be provided as hex in the request body. The <code>txid</code> will be returned on success.'
     },
-    urlString: "/api/tx",
+    urlString: '/api/tx',
     showConditions: bitcoinNetworks.concat(liquidNetworks),
     showJsExamples: showJsExamplesDefault,
     codeExample: {
@@ -6510,22 +6510,22 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "category",
-    category: "lightning",
-    fragment: "lightning",
-    title: "Lightning",
+    type: 'category',
+    category: 'lightning',
+    fragment: 'lightning',
+    title: 'Lightning',
     showConditions: lightningNetworks
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-lightning-network-stats",
-    title: "GET Network Stats",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-lightning-network-stats',
+    title: 'GET Network Stats',
     description: {
-      default: "<p>Returns network-wide stats such as total number of channels and nodes, total capacity, and average/median fee figures.</p><p>Pass one of the following for <code>:interval</code>: <code>latest</code>, <code>24h</code>, <code>3d</code>, <code>1w</code>, <code>1m</code>, <code>3m</code>, <code>6m</code>, <code>1y</code>, <code>2y</code>, <code>3y</code>.</p>"
+      default: '<p>Returns network-wide stats such as total number of channels and nodes, total capacity, and average/median fee figures.</p><p>Pass one of the following for <code>:interval</code>: <code>latest</code>, <code>24h</code>, <code>3d</code>, <code>1w</code>, <code>1m</code>, <code>3m</code>, <code>6m</code>, <code>1y</code>, <code>2y</code>, <code>3y</code>.</p>'
     },
-    urlString: "/v1/lightning/statistics/:interval",
+    urlString: '/v1/lightning/statistics/:interval',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -6613,15 +6613,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-lightning-nodes-channels",
-    title: "GET Nodes/Channels",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-lightning-nodes-channels',
+    title: 'GET Nodes/Channels',
     description: {
-      default: "<p>Returns Lightning nodes and channels that match a full-text, case-insensitive search <code>:query</code> across node aliases, node pubkeys, channel IDs, and short channel IDs.</p>"
+      default: '<p>Returns Lightning nodes and channels that match a full-text, case-insensitive search <code>:query</code> across node aliases, node pubkeys, channel IDs, and short channel IDs.</p>'
     },
-    urlString: "/v1/lightning/search?searchText=:query",
+    urlString: '/v1/lightning/search?searchText=:query',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -6698,15 +6698,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-lightning-nodes-country",
-    title: "GET Nodes in Country",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-lightning-nodes-country',
+    title: 'GET Nodes in Country',
     description: {
-      default: "<p>Returns a list of Lightning nodes running on clearnet in the requested <code>:country</code>, where <code>:country</code> is an ISO Alpha-2 country code.</p>"
+      default: '<p>Returns a list of Lightning nodes running on clearnet in the requested <code>:country</code>, where <code>:country</code> is an ISO Alpha-2 country code.</p>'
     },
-    urlString: "/v1/lightning/nodes/country/:country",
+    urlString: '/v1/lightning/nodes/country/:country',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -6920,15 +6920,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-country-node-stats",
-    title: "GET Node Stats Per Country",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-country-node-stats',
+    title: 'GET Node Stats Per Country',
     description: {
-      default: "<p>Returns aggregate capacity and number of clearnet nodes per country. Capacity figures are in satoshis.</p>"
+      default: '<p>Returns aggregate capacity and number of clearnet nodes per country. Capacity figures are in satoshis.</p>'
     },
-    urlString: "/v1/lightning/nodes/countries",
+    urlString: '/v1/lightning/nodes/countries',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -7064,15 +7064,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-isp-nodes",
-    title: "GET ISP Nodes",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-isp-nodes',
+    title: 'GET ISP Nodes',
     description: {
-      default: "<p>Returns a list of nodes hosted by a specified <code>:isp</code>, where <code>:isp</code> is an ISP's ASN.</p>"
+      default: '<p>Returns a list of nodes hosted by a specified <code>:isp</code>, where <code>:isp</code> is an ISP\'s ASN.</p>'
     },
-    urlString: "/v1/lightning/nodes/isp/:isp",
+    urlString: '/v1/lightning/nodes/isp/:isp',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -7183,15 +7183,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-isp-node-stats",
-    title: "GET Node Stats Per ISP",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-isp-node-stats',
+    title: 'GET Node Stats Per ISP',
     description: {
-      default: "<p>Returns aggregate capacity, number of nodes, and number of channels per ISP. Capacity figures are in satoshis.</p>"
+      default: '<p>Returns aggregate capacity, number of nodes, and number of channels per ISP. Capacity figures are in satoshis.</p>'
     },
-    urlString: "/v1/lightning/nodes/isp-ranking",
+    urlString: '/v1/lightning/nodes/isp-ranking',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -7295,15 +7295,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-top-100-nodes",
-    title: "GET Top 100 Nodes",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-top-100-nodes',
+    title: 'GET Top 100 Nodes',
     description: {
-      default: "<p>Returns two lists of the top 100 nodes: one ordered by liquidity (aggregate channel capacity) and the other ordered by connectivity (number of open channels).</p>"
+      default: '<p>Returns two lists of the top 100 nodes: one ordered by liquidity (aggregate channel capacity) and the other ordered by connectivity (number of open channels).</p>'
     },
-    urlString: "/v1/lightning/nodes/rankings",
+    urlString: '/v1/lightning/nodes/rankings',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -7418,15 +7418,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-top-100-nodes-liquidity",
-    title: "GET Top 100 Nodes by Liquidity",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-top-100-nodes-liquidity',
+    title: 'GET Top 100 Nodes by Liquidity',
     description: {
-      default: "<p>Returns a list of the top 100 nodes by liquidity (aggregate channel capacity).</p>"
+      default: '<p>Returns a list of the top 100 nodes by liquidity (aggregate channel capacity).</p>'
     },
-    urlString: "/v1/lightning/nodes/rankings/liquidity",
+    urlString: '/v1/lightning/nodes/rankings/liquidity',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -7615,15 +7615,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-top-100-nodes-connectivity",
-    title: "GET Top 100 Nodes by Connectivity",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-top-100-nodes-connectivity',
+    title: 'GET Top 100 Nodes by Connectivity',
     description: {
-      default: "<p>Returns a list of the top 100 nodes by connectivity (number of open channels).</p>"
+      default: '<p>Returns a list of the top 100 nodes by connectivity (number of open channels).</p>'
     },
-    urlString: "/v1/lightning/nodes/rankings/connectivity",
+    urlString: '/v1/lightning/nodes/rankings/connectivity',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -7811,15 +7811,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-top-100-oldest-nodes",
-    title: "GET Top 100 Oldest Nodes",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-top-100-oldest-nodes',
+    title: 'GET Top 100 Oldest Nodes',
     description: {
-      default: "<p>Returns a list of the top 100 oldest nodes.</p>"
+      default: '<p>Returns a list of the top 100 oldest nodes.</p>'
     },
-    urlString: "/v1/lightning/nodes/rankings/age",
+    urlString: '/v1/lightning/nodes/rankings/age',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -7998,15 +7998,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-node-stats",
-    title: "GET Node Stats",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-node-stats',
+    title: 'GET Node Stats',
     description: {
-      default: "<p>Returns details about a node with the given <code>:pubKey</code>.</p>"
+      default: '<p>Returns details about a node with the given <code>:pubKey</code>.</p>'
     },
-    urlString: "/v1/lightning/nodes/:pubKey",
+    urlString: '/v1/lightning/nodes/:pubKey',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -8162,15 +8162,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-historical-node-stats",
-    title: "GET Historical Node Stats",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-historical-node-stats',
+    title: 'GET Historical Node Stats',
     description: {
-      default: "<p>Returns historical stats for a node with the given <code>:pubKey</code>.</p>"
+      default: '<p>Returns historical stats for a node with the given <code>:pubKey</code>.</p>'
     },
-    urlString: "/v1/lightning/nodes/:pubKey/statistics",
+    urlString: '/v1/lightning/nodes/:pubKey/statistics',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -8260,15 +8260,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-channel",
-    title: "GET Channel",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-channel',
+    title: 'GET Channel',
     description: {
-      default: "<p>Returns info about a Lightning channel with the given <code>:channelId</code>.</p>"
+      default: '<p>Returns info about a Lightning channel with the given <code>:channelId</code>.</p>'
     },
-    urlString: "/v1/lightning/channels/:channelId",
+    urlString: '/v1/lightning/channels/:channelId',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -8425,15 +8425,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-channels-from-txid",
-    title: "GET Channels from TXID",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-channels-from-txid',
+    title: 'GET Channels from TXID',
     description: {
-      default: "<p>Returns channels that correspond to the given <code>:txid</code> (multiple transaction IDs can be specified).</p>"
+      default: '<p>Returns channels that correspond to the given <code>:txid</code> (multiple transaction IDs can be specified).</p>'
     },
-    urlString: "/v1/lightning/channels/txids?txId[]=:txid",
+    urlString: '/v1/lightning/channels/txids?txId[]=:txid',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -8626,15 +8626,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-channels-from-pubkey",
-    title: "GET Channels from Node Pubkey",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-channels-from-pubkey',
+    title: 'GET Channels from Node Pubkey',
     description: {
-      default: "<p>Returns a list of a node's channels given its <code>:pubKey</code>. Ten channels are returned at a time. Use <code>:index</code> for paging. <code>:channelStatus</code> can be <code>open</code>, <code>active</code>, or <code>closed</code>.</p>"
+      default: '<p>Returns a list of a node\'s channels given its <code>:pubKey</code>. Ten channels are returned at a time. Use <code>:index</code> for paging. <code>:channelStatus</code> can be <code>open</code>, <code>active</code>, or <code>closed</code>.</p>'
     },
-    urlString: "/v1/lightning/channels?public_key=:pubKey&status=:channelStatus",
+    urlString: '/v1/lightning/channels?public_key=:pubKey&status=:channelStatus',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -8762,15 +8762,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-channel-geodata",
-    title: "GET Channel Geodata",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-channel-geodata',
+    title: 'GET Channel Geodata',
     description: {
-      default: "<p>Returns a list of channels with corresponding node geodata.</p>"
+      default: '<p>Returns a list of channels with corresponding node geodata.</p>'
     },
-    urlString: "/v1/lightning/channels-geo",
+    urlString: '/v1/lightning/channels-geo',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -8870,15 +8870,15 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "endpoint",
-    category: "lightning",
-    httpRequestMethod: "GET",
-    fragment: "get-channel-geodata-node",
-    title: "GET Channel Geodata for Node",
+    type: 'endpoint',
+    category: 'lightning',
+    httpRequestMethod: 'GET',
+    fragment: 'get-channel-geodata-node',
+    title: 'GET Channel Geodata for Node',
     description: {
-      default: "<p>Returns a list of channels with corresponding geodata for a node with the given <code>:pubKey</code>.</p>"
+      default: '<p>Returns a list of channels with corresponding geodata for a node with the given <code>:pubKey</code>.</p>'
     },
-    urlString: "/v1/lightning/channels-geo/:pubKey",
+    urlString: '/v1/lightning/channels-geo/:pubKey',
     showConditions: lightningNetworks,
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
@@ -8978,25 +8978,25 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "category",
-    category: "accelerator-public",
-    fragment: "accelerator-public",
-    title: "Accelerator (Public)",
-    showConditions: [""],
+    type: 'category',
+    category: 'accelerator-public',
+    fragment: 'accelerator-public',
+    title: 'Accelerator (Public)',
+    showConditions: [''],
     options: { officialOnly: true },
   },
   {
     options: { officialOnly: true },
-    type: "endpoint",
-    category: "accelerator-public",
-    httpRequestMethod: "POST",
-    fragment: "accelerator-estimate",
-    title: "POST Calculate Estimated Costs",
+    type: 'endpoint',
+    category: 'accelerator-public',
+    httpRequestMethod: 'POST',
+    fragment: 'accelerator-estimate',
+    title: 'POST Calculate Estimated Costs',
     description: {
-      default: "<p>Returns estimated costs to accelerate a transaction. Optionally set the <code>X-Mempool-Auth</code> header to get customized estimation.</p>"
+      default: '<p>Returns estimated costs to accelerate a transaction. Optionally set the <code>X-Mempool-Auth</code> header to get customized estimation.</p>'
     },
-    urlString: "/v1/services/accelerator/estimate",
-    showConditions: [""],
+    urlString: '/v1/services/accelerator/estimate',
+    showConditions: [''],
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
       default: {
@@ -9008,8 +9008,8 @@ export const restApiDocsData = [
         codeSampleMainnet: {
           esModule: [],
           commonJS: [],
-          curl: ["txInput=ee13ebb99632377c15c94980357f674d285ac413452050031ea6dcd3e9b2dc29"],
-          headers: "X-Mempool-Auth: stacksats",
+          curl: ['txInput=ee13ebb99632377c15c94980357f674d285ac413452050031ea6dcd3e9b2dc29'],
+          headers: 'X-Mempool-Auth: stacksats',
           response: `{
   "txSummary": {
     "txid": "ee13ebb99632377c15c94980357f674d285ac413452050031ea6dcd3e9b2dc29",
@@ -9062,16 +9062,16 @@ export const restApiDocsData = [
   },
   {
     options: { officialOnly: true },
-    type: "endpoint",
-    category: "accelerator-public",
-    httpRequestMethod: "POST",
-    fragment: "accelerator-get-invoice",
-    title: "POST Generate Acceleration Invoice",
+    type: 'endpoint',
+    category: 'accelerator-public',
+    httpRequestMethod: 'POST',
+    fragment: 'accelerator-get-invoice',
+    title: 'POST Generate Acceleration Invoice',
     description: {
-      default: "<p>Request a LN invoice to accelerate a transaction.</p>"
+      default: '<p>Request a LN invoice to accelerate a transaction.</p>'
     },
-    urlString: "/v1/services/payments/bitcoin",
-    showConditions: [""],
+    urlString: '/v1/services/payments/bitcoin',
+    showConditions: [''],
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
       default: {
@@ -9083,8 +9083,8 @@ export const restApiDocsData = [
         codeSampleMainnet: {
           esModule: [],
           commonJS: [],
-          curl: ["product=ee13ebb99632377c15c94980357f674d285ac413452050031ea6dcd3e9b2dc29&amount=12500"],
-          headers: "",
+          curl: ['product=ee13ebb99632377c15c94980357f674d285ac413452050031ea6dcd3e9b2dc29&amount=12500'],
+          headers: '',
           response: `[
   {
     "btcpayInvoiceId": "4Ww53d7VgSa596jmCFufe7",
@@ -9102,16 +9102,16 @@ export const restApiDocsData = [
   },
   {
     options: { officialOnly: true },
-    type: "endpoint",
-    category: "accelerator-public",
-    httpRequestMethod: "GET",
-    fragment: "accelerator-pending",
-    title: "GET Pending Accelerations",
+    type: 'endpoint',
+    category: 'accelerator-public',
+    httpRequestMethod: 'GET',
+    fragment: 'accelerator-pending',
+    title: 'GET Pending Accelerations',
     description: {
-      default: "<p>Returns all transactions currently being accelerated.</p>"
+      default: '<p>Returns all transactions currently being accelerated.</p>'
     },
-    urlString: "/v1/services/accelerator/accelerations",
-    showConditions: [""],
+    urlString: '/v1/services/accelerator/accelerations',
+    showConditions: [''],
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
       default: {
@@ -9153,11 +9153,11 @@ export const restApiDocsData = [
   },
   {
     options: { officialOnly: true },
-    type: "endpoint",
-    category: "accelerator-public",
-    httpRequestMethod: "GET",
-    fragment: "accelerator-public-history",
-    title: "GET Acceleration History",
+    type: 'endpoint',
+    category: 'accelerator-public',
+    httpRequestMethod: 'GET',
+    fragment: 'accelerator-public-history',
+    title: 'GET Acceleration History',
     description: {
       default: `<p>Returns all past accelerated transactions.
       Filters can be applied:<ul>
@@ -9170,8 +9170,8 @@ export const restApiDocsData = [
       <li><code>pageLength</code>: the page lenght if using pagination <i>(min: 1, max: 50)</i></a>
       </ul></p>`
     },
-    urlString: "/v1/services/accelerator/accelerations/history",
-    showConditions: [""],
+    urlString: '/v1/services/accelerator/accelerations/history',
+    showConditions: [''],
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
       default: {
@@ -9209,25 +9209,25 @@ export const restApiDocsData = [
     }
   },
   {
-    type: "category",
-    category: "accelerator-private",
-    fragment: "accelerator-private",
-    title: "Accelerator (Authenticated)",
-    showConditions: [""],
+    type: 'category',
+    category: 'accelerator-private',
+    fragment: 'accelerator-private',
+    title: 'Accelerator (Authenticated)',
+    showConditions: [''],
     options: { officialOnly: true },
   },
   {
     options: { officialOnly: true },
-    type: "endpoint",
-    category: "accelerator-private",
-    httpRequestMethod: "GET",
-    fragment: "accelerator-top-up-history",
-    title: "GET Top Up History",
+    type: 'endpoint',
+    category: 'accelerator-private',
+    httpRequestMethod: 'GET',
+    fragment: 'accelerator-top-up-history',
+    title: 'GET Top Up History',
     description: {
-      default: "<p>Returns a list of top ups the user has made as prepayment for the accelerator service.</p>"
+      default: '<p>Returns a list of top ups the user has made as prepayment for the accelerator service.</p>'
     },
-    urlString: "/v1/services/accelerator/top-up-history",
-    showConditions: [""],
+    urlString: '/v1/services/accelerator/top-up-history',
+    showConditions: [''],
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
       default: {
@@ -9240,7 +9240,7 @@ export const restApiDocsData = [
           esModule: [],
           commonJS: [],
           curl: [],
-          headers: "X-Mempool-Auth: stacksats",
+          headers: 'X-Mempool-Auth: stacksats',
           response: `[
   {
     "type": "Bitcoin",
@@ -9266,16 +9266,16 @@ export const restApiDocsData = [
   },
   {
     options: { officialOnly: true },
-    type: "endpoint",
-    category: "accelerator-private",
-    httpRequestMethod: "GET",
-    fragment: "accelerator-balance",
-    title: "GET Available Balance",
+    type: 'endpoint',
+    category: 'accelerator-private',
+    httpRequestMethod: 'GET',
+    fragment: 'accelerator-balance',
+    title: 'GET Available Balance',
     description: {
-      default: "<p>Returns the user's currently available balance, currently locked funds, and total fees paid so far.</p>"
+      default: '<p>Returns the user\'s currently available balance, currently locked funds, and total fees paid so far.</p>'
     },
-    urlString: "/v1/services/accelerator/balance",
-    showConditions: [""],
+    urlString: '/v1/services/accelerator/balance',
+    showConditions: [''],
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
       default: {
@@ -9288,7 +9288,7 @@ export const restApiDocsData = [
           esModule: [],
           commonJS: [],
           curl: [],
-          headers: "X-Mempool-Auth: stacksats",
+          headers: 'X-Mempool-Auth: stacksats',
           response: `{
   "balance": 99900000,
   "hold": 101829,
@@ -9300,16 +9300,16 @@ export const restApiDocsData = [
   },
   {
     options: { officialOnly: true },
-    type: "endpoint",
-    category: "accelerator-private",
-    httpRequestMethod: "POST",
-    fragment: "accelerator-accelerate",
-    title: "POST Accelerate A Transaction (Pro)",
+    type: 'endpoint',
+    category: 'accelerator-private',
+    httpRequestMethod: 'POST',
+    fragment: 'accelerator-accelerate',
+    title: 'POST Accelerate A Transaction (Pro)',
     description: {
-      default: "<p>Sends a request to accelerate a transaction.</p>"
+      default: '<p>Sends a request to accelerate a transaction.</p>'
     },
-    urlString: "/v1/services/accelerator/accelerate",
-    showConditions: [""],
+    urlString: '/v1/services/accelerator/accelerate',
+    showConditions: [''],
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
       default: {
@@ -9321,8 +9321,8 @@ export const restApiDocsData = [
         codeSampleMainnet: {
           esModule: [],
           commonJS: [],
-          curl: ["txInput=ee13ebb99632377c15c94980357f674d285ac413452050031ea6dcd3e9b2dc29&userBid=21000000"],
-          headers: "X-Mempool-Auth: stacksats",
+          curl: ['txInput=ee13ebb99632377c15c94980357f674d285ac413452050031ea6dcd3e9b2dc29&userBid=21000000'],
+          headers: 'X-Mempool-Auth: stacksats',
           response: `HTTP/1.1 200 OK`,
         },
       }
@@ -9330,16 +9330,16 @@ export const restApiDocsData = [
   },
   {
     options: { officialOnly: true },
-    type: "endpoint",
-    category: "accelerator-private",
-    httpRequestMethod: "GET",
-    fragment: "accelerator-history",
-    title: "GET Acceleration History",
+    type: 'endpoint',
+    category: 'accelerator-private',
+    httpRequestMethod: 'GET',
+    fragment: 'accelerator-history',
+    title: 'GET Acceleration History',
     description: {
-      default: "<p>Returns the user's past acceleration requests.</p><p>Pass one of the following for <code>:status</code>: <code>all</code>, <code>requested</code>, <code>accelerating</code>, <code>mined</code>, <code>completed</code>, <code>failed</code>. Pass <code>true</code> in <code>:details</code> to get a detailed <code>history</code> of the acceleration request.</p>"
+      default: '<p>Returns the user\'s past acceleration requests.</p><p>Pass one of the following for <code>:status</code>: <code>all</code>, <code>requested</code>, <code>accelerating</code>, <code>mined</code>, <code>completed</code>, <code>failed</code>. Pass <code>true</code> in <code>:details</code> to get a detailed <code>history</code> of the acceleration request.</p>'
     },
-    urlString: "/v1/services/accelerator/history?status=:status&details=:details",
-    showConditions: [""],
+    urlString: '/v1/services/accelerator/history?status=:status&details=:details',
+    showConditions: [''],
     showJsExamples: showJsExamplesDefaultFalse,
     codeExample: {
       default: {
@@ -9352,7 +9352,7 @@ export const restApiDocsData = [
           esModule: [],
           commonJS: [],
           curl: [],
-          headers: "X-Mempool-Auth: stacksats",
+          headers: 'X-Mempool-Auth: stacksats',
           response: `[
   {
     "id": 89,
@@ -9450,272 +9450,272 @@ export const restApiDocsData = [
 
 export const faqData = [
   {
-    type: "category",
-    category: "basics",
-    fragment: "basics",
-    title: "Basics",
+    type: 'category',
+    category: 'basics',
+    fragment: 'basics',
+    title: 'Basics',
     showConditions: bitcoinNetworks
   },
   {
-    type: "endpoint",
-    category: "basics",
+    type: 'endpoint',
+    category: 'basics',
     showConditions: bitcoinNetworks,
-    fragment: "what-is-a-mempool",
-    title: "What is a mempool?",
+    fragment: 'what-is-a-mempool',
+    title: 'What is a mempool?',
   },
   {
-    type: "endpoint",
-    category: "basics",
+    type: 'endpoint',
+    category: 'basics',
     showConditions: bitcoinNetworks,
-    fragment: "what-is-a-mempool-explorer",
-    title: "What is a mempool explorer?",
+    fragment: 'what-is-a-mempool-explorer',
+    title: 'What is a mempool explorer?',
   },
   {
-    type: "endpoint",
-    category: "basics",
+    type: 'endpoint',
+    category: 'basics',
     showConditions: bitcoinNetworks,
-    fragment: "what-is-a-blockchain",
-    title: "What is a blockchain?",
+    fragment: 'what-is-a-blockchain',
+    title: 'What is a blockchain?',
   },
   {
-    type: "endpoint",
-    category: "basics",
+    type: 'endpoint',
+    category: 'basics',
     showConditions: bitcoinNetworks,
-    fragment: "what-is-a-block-explorer",
-    title: "What is a block explorer?",
+    fragment: 'what-is-a-block-explorer',
+    title: 'What is a block explorer?',
   },
   {
-    type: "endpoint",
-    category: "basics",
+    type: 'endpoint',
+    category: 'basics',
     showConditions: bitcoinNetworks,
-    fragment: "what-is-mining",
-    title: "What is mining?",
+    fragment: 'what-is-mining',
+    title: 'What is mining?',
   },
   {
-    type: "endpoint",
-    category: "basics",
+    type: 'endpoint',
+    category: 'basics',
     showConditions: bitcoinNetworks,
-    fragment: "what-are-mining-pools",
-    title: "What are mining pools?",
+    fragment: 'what-are-mining-pools',
+    title: 'What are mining pools?',
   },
   {
-    type: "endpoint",
-    category: "basics",
+    type: 'endpoint',
+    category: 'basics',
     showConditions: bitcoinNetworks,
-    fragment: "what-are-vb-wu",
-    title: "What are virtual bytes (vB) and weight units (WU)?",
+    fragment: 'what-are-vb-wu',
+    title: 'What are virtual bytes (vB) and weight units (WU)?',
   },
   {
-    type: "endpoint",
-    category: "basics",
+    type: 'endpoint',
+    category: 'basics',
     showConditions: bitcoinNetworks,
-    fragment: "what-is-svb",
-    title: "What is sat/vB?",
+    fragment: 'what-is-svb',
+    title: 'What is sat/vB?',
   },
   {
-    type: "category",
-    category: "help",
-    fragment: "help-stuck-transaction",
-    title: "Help! My transaction is stuck",
+    type: 'category',
+    category: 'help',
+    fragment: 'help-stuck-transaction',
+    title: 'Help! My transaction is stuck',
     showConditions: bitcoinNetworks
   },
   {
-    type: "endpoint",
-    category: "help",
+    type: 'endpoint',
+    category: 'help',
     showConditions: bitcoinNetworks,
-    fragment: "why-is-transaction-stuck-in-mempool",
-    title: "Why isn't my transaction confirming?",
+    fragment: 'why-is-transaction-stuck-in-mempool',
+    title: 'Why isn\'t my transaction confirming?',
   },
   {
-    type: "endpoint",
-    category: "help",
+    type: 'endpoint',
+    category: 'help',
     showConditions: bitcoinNetworks,
-    fragment: "how-to-get-transaction-confirmed-quickly",
-    title: "How can I get my transaction confirmed more quickly?",
+    fragment: 'how-to-get-transaction-confirmed-quickly',
+    title: 'How can I get my transaction confirmed more quickly?',
   },
   {
-    type: "endpoint",
-    category: "help",
+    type: 'endpoint',
+    category: 'help',
     showConditions: bitcoinNetworks,
-    fragment: "how-prevent-stuck-transaction",
-    title: "How can I prevent a transaction from getting stuck in the future?",
+    fragment: 'how-prevent-stuck-transaction',
+    title: 'How can I prevent a transaction from getting stuck in the future?',
   },
   {
-    type: "category",
-    category: "using",
-    fragment: "using-this-website",
-    title: "Using this website",
+    type: 'category',
+    category: 'using',
+    fragment: 'using-this-website',
+    title: 'Using this website',
     showConditions: bitcoinNetworks
   },
   {
-    type: "endpoint",
-    category: "how-to",
+    type: 'endpoint',
+    category: 'how-to',
     showConditions: bitcoinNetworks,
-    fragment: "looking-up-transactions",
-    title: "How can I look up a transaction?",
+    fragment: 'looking-up-transactions',
+    title: 'How can I look up a transaction?',
   },
   {
-    type: "endpoint",
-    category: "how-to",
+    type: 'endpoint',
+    category: 'how-to',
     showConditions: bitcoinNetworks,
-    fragment: "looking-up-addresses",
-    title: "How can I look up an address?",
+    fragment: 'looking-up-addresses',
+    title: 'How can I look up an address?',
   },
   {
-    type: "endpoint",
-    category: "how-to",
+    type: 'endpoint',
+    category: 'how-to',
     showConditions: bitcoinNetworks,
-    fragment: "looking-up-blocks",
-    title: "How can I look up a block?",
+    fragment: 'looking-up-blocks',
+    title: 'How can I look up a block?',
   },
   {
-    type: "endpoint",
-    category: "how-to",
+    type: 'endpoint',
+    category: 'how-to',
     showConditions: bitcoinNetworks,
-    fragment: "looking-up-fee-estimates",
-    title: "How can I look up fee estimates?",
+    fragment: 'looking-up-fee-estimates',
+    title: 'How can I look up fee estimates?',
   },
   {
-    type: "endpoint",
-    category: "how-to",
+    type: 'endpoint',
+    category: 'how-to',
     showConditions: bitcoinNetworks,
-    fragment: "looking-up-historical-trends",
-    title: "How can I explore historical trends?",
+    fragment: 'looking-up-historical-trends',
+    title: 'How can I explore historical trends?',
   },
   {
-    type: "category",
-    category: "advanced",
-    fragment: "advanced",
-    title: "Advanced",
+    type: 'category',
+    category: 'advanced',
+    fragment: 'advanced',
+    title: 'Advanced',
     showConditions: bitcoinNetworks
   },
   {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
-    fragment: "what-is-full-mempool",
-    title: "What does it mean for the mempool to be \"full\"?",
+    fragment: 'what-is-full-mempool',
+    title: 'What does it mean for the mempool to be "full"?',
   },
   {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
-    fragment: "how-big-is-mempool-used-by-mempool-space",
-    title: "How big is the mempool used by mempool.space?",
+    fragment: 'how-big-is-mempool-used-by-mempool-space',
+    title: 'How big is the mempool used by mempool.space?',
     options: { officialOnly: true },
   },
   {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
-    fragment: "what-is-memory-usage",
-    title: "What is memory usage?",
+    fragment: 'what-is-memory-usage',
+    title: 'What is memory usage?',
   },
   {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
-    fragment: "why-empty-blocks",
-    title: "Why are there empty blocks?",
+    fragment: 'why-empty-blocks',
+    title: 'Why are there empty blocks?',
   },
   {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
-    fragment: "why-block-timestamps-dont-always-increase",
-    title: "Why don't block timestamps always increase?",
+    fragment: 'why-block-timestamps-dont-always-increase',
+    title: 'Why don\'t block timestamps always increase?',
   },
   {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
-    fragment: "why-dont-fee-ranges-match",
-    title: "Why doesn't the fee range shown for a block match the feerates of transactions within the block?",
+    fragment: 'why-dont-fee-ranges-match',
+    title: 'Why doesn\'t the fee range shown for a block match the feerates of transactions within the block?',
   },
   {
-    type: "endpoint",
-    category: "advanced",
-    showConditions: bitcoinNetworks,
-    options: { auditOnly: true },
-    fragment: "how-do-block-audits-work",
-    title: "How do block audits work?",
-  },
-  {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
     options: { auditOnly: true },
-    fragment: "what-is-block-health",
-    title: "What is block health?",
+    fragment: 'how-do-block-audits-work',
+    title: 'How do block audits work?',
   },
   {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
-    fragment: "how-do-mempool-goggles-work",
-    title: "How do Mempool Goggles™ work?",
+    options: { auditOnly: true },
+    fragment: 'what-is-block-health',
+    title: 'What is block health?',
   },
   {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
-    fragment: "what-are-sigops",
-    title: "What are sigops?",
+    fragment: 'how-do-mempool-goggles-work',
+    title: 'How do Mempool Goggles™ work?',
   },
   {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
-    fragment: "what-is-adjusted-vsize",
-    title: "What is adjusted vsize?",
+    fragment: 'what-are-sigops',
+    title: 'What are sigops?',
   },
   {
-    type: "endpoint",
-    category: "advanced",
+    type: 'endpoint',
+    category: 'advanced',
     showConditions: bitcoinNetworks,
-    fragment: "why-do-the-projected-block-fee-ranges-overlap",
-    title: "Why do the projected block fee ranges overlap?",
+    fragment: 'what-is-adjusted-vsize',
+    title: 'What is adjusted vsize?',
   },
   {
-    type: "category",
-    category: "self-hosting",
-    fragment: "self-hosting",
-    title: "Self-Hosting",
+    type: 'endpoint',
+    category: 'advanced',
+    showConditions: bitcoinNetworks,
+    fragment: 'why-do-the-projected-block-fee-ranges-overlap',
+    title: 'Why do the projected block fee ranges overlap?',
+  },
+  {
+    type: 'category',
+    category: 'self-hosting',
+    fragment: 'self-hosting',
+    title: 'Self-Hosting',
     showConditions: bitcoinNetworks
   },
   {
-    type: "endpoint",
-    category: "self-hosting",
+    type: 'endpoint',
+    category: 'self-hosting',
     showConditions: bitcoinNetworks,
-    fragment: "who-runs-this-website",
-    title: "Who runs this website?",
+    fragment: 'who-runs-this-website',
+    title: 'Who runs this website?',
   },
   {
-    type: "endpoint",
-    category: "self-hosting",
+    type: 'endpoint',
+    category: 'self-hosting',
     showConditions: bitcoinNetworks,
-    fragment: "host-my-own-instance-raspberry-pi",
-    title: "How can I host my own instance on a Raspberry Pi?",
+    fragment: 'host-my-own-instance-raspberry-pi',
+    title: 'How can I host my own instance on a Raspberry Pi?',
   },
   {
-    type: "endpoint",
-    category: "self-hosting",
+    type: 'endpoint',
+    category: 'self-hosting',
     showConditions: bitcoinNetworks,
-    fragment: "host-my-own-instance-server",
-    title: "How can I host a Mempool instance on my own server?",
+    fragment: 'host-my-own-instance-server',
+    title: 'How can I host a Mempool instance on my own server?',
   },
   {
-    type: "endpoint",
-    category: "self-hosting",
+    type: 'endpoint',
+    category: 'self-hosting',
     showConditions: bitcoinNetworks,
-    fragment: "install-mempool-with-docker",
-    title: "Can I install Mempool using Docker?",
+    fragment: 'install-mempool-with-docker',
+    title: 'Can I install Mempool using Docker?',
   },
   {
-    type: "endpoint",
-    category: "self-hosting",
+    type: 'endpoint',
+    category: 'self-hosting',
     showConditions: bitcoinNetworks,
-    fragment: "address-lookup-issues",
-    title: "Why do I get an error for certain address lookups on my Mempool instance?",
+    fragment: 'address-lookup-issues',
+    title: 'Why do I get an error for certain address lookups on my Mempool instance?',
   }
 ];

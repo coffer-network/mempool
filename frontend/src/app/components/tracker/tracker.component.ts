@@ -616,7 +616,7 @@ export class TrackerComponent implements OnInit, OnDestroy {
       }),
       tap(eta => {
         if (this.replaced) {
-          this.trackerStage = 'replaced'
+          this.trackerStage = 'replaced';
         } else if (eta?.blocks === 0) {
           this.trackerStage = 'next';
         } else if (eta?.blocks < 3){
@@ -625,7 +625,7 @@ export class TrackerComponent implements OnInit, OnDestroy {
           this.trackerStage = 'pending';
         }
       })
-    )
+    );
   }
 
   handleLoadElectrsTransactionError(error: any): Observable<any> {
@@ -702,6 +702,11 @@ export class TrackerComponent implements OnInit, OnDestroy {
         break;
       case 'signet':
         if (blockHeight < this.stateService.env.SIGNET_BLOCK_AUDIT_START_HEIGHT) {
+          return false;
+        }
+        break;
+      case 'regtest':
+        if (blockHeight < this.stateService.env.REGTEST_BLOCK_AUDIT_START_HEIGHT) {
           return false;
         }
         break;

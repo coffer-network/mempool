@@ -366,7 +366,7 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
               acceleration.acceleratedFeeRate = Math.max(acceleration.effectiveFee, acceleration.effectiveFee + boostCost) / acceleration.effectiveVsize;
               acceleration.boost = boostCost;
               this.tx.acceleratedAt = acceleration.added;
-              this.accelerationInfo = acceleration;  
+              this.accelerationInfo = acceleration;
             } else {
               this.tx.feeDelta = undefined;
             }
@@ -429,14 +429,14 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
                   firstSeen,
                 };
               })
-            )
+            );
           } else {
             return this.apiService.getBlockTxAudit$(hash, txid).pipe(
               retry({ count: 3, delay: 2000 }),
               catchError(() => {
                 return of(null);
               })
-            )
+            );
           }
         } else {
           return of(isCoinbase ? { coinbase: true } : null);
@@ -849,7 +849,7 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
       this.tx.feeDelta = cpfpInfo.feeDelta;
       this.setIsAccelerated(firstCpfp);
     }
-    
+
     if (this.notAcceleratedOnLoad === null) {
       this.notAcceleratedOnLoad = !this.isAcceleration;
     }
@@ -895,7 +895,7 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
               this.cpfpInfo,
             );
           })
-        )
+        );
       }
     }
     this.isAccelerated$.next(this.isAcceleration);
@@ -939,6 +939,11 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       case 'signet':
         if (blockHeight < this.stateService.env.SIGNET_BLOCK_AUDIT_START_HEIGHT) {
+          return false;
+        }
+        break;
+      case 'regtest':
+        if (blockHeight < this.stateService.env.REGTEST_BLOCK_AUDIT_START_HEIGHT) {
           return false;
         }
         break;

@@ -69,6 +69,7 @@ export interface Env {
   MAINNET_BLOCK_AUDIT_START_HEIGHT: number;
   TESTNET_BLOCK_AUDIT_START_HEIGHT: number;
   SIGNET_BLOCK_AUDIT_START_HEIGHT: number;
+  REGTEST_BLOCK_AUDIT_START_HEIGHT: number;
   HISTORICAL_PRICE: boolean;
   ACCELERATOR: boolean;
   ACCELERATOR_BUTTON: boolean;
@@ -107,6 +108,7 @@ const defaultEnv: Env = {
   'MAINNET_BLOCK_AUDIT_START_HEIGHT': 0,
   'TESTNET_BLOCK_AUDIT_START_HEIGHT': 0,
   'SIGNET_BLOCK_AUDIT_START_HEIGHT': 0,
+  'REGTEST_BLOCK_AUDIT_START_HEIGHT': 0,
   'HISTORICAL_PRICE': true,
   'ACCELERATOR': false,
   'ACCELERATOR_BUTTON': true,
@@ -124,7 +126,7 @@ export class StateService {
   isMempoolSpaceBuild = window['isMempoolSpaceBuild'] ?? false;
   backend: 'esplora' | 'electrum' | 'none' = 'esplora';
   network = '';
-  lightningNetworks = ['', 'mainnet', 'bitcoin', 'testnet', 'signet'];
+  lightningNetworks = ['', 'mainnet', 'bitcoin', 'testnet', 'signet', 'regtest'];
   lightning = false;
   blockVSize: number;
   env: Env;
@@ -317,7 +319,7 @@ export class StateService {
     this.hideAudit.subscribe((hide) => {
       this.storageService.setValue('audit-preference', hide ? 'hide' : 'show');
     });
-    
+
     const fiatPreference = this.storageService.getValue('fiat-preference');
     this.fiatCurrency$ = new BehaviorSubject<string>(fiatPreference || 'USD');
 
@@ -373,6 +375,12 @@ export class StateService {
         if (this.network !== 'testnet4') {
           this.network = 'testnet4';
           this.networkChanged$.next('testnet4');
+        }
+        return;
+      case 'regtest':
+        if (this.network !== 'regtest') {
+          this.network = 'regtest';
+          this.networkChanged$.next('regtest');
         }
         return;
       default:
@@ -431,7 +439,7 @@ export class StateService {
   }
 
   isAnyTestnet(): boolean {
-    return ['testnet', 'testnet4', 'signet', 'liquidtestnet'].includes(this.network);
+    return ['testnet', 'testnet4', 'signet', 'regtest', 'liquidtestnet'].includes(this.network);
   }
 
   resetChainTip() {
@@ -460,6 +468,6 @@ export class StateService {
   focusSearchInputDesktop() {
     if (!hasTouchScreen()) {
       this.searchFocus$.next(true);
-    }    
+    }
   }
 }
