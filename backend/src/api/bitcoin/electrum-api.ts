@@ -126,16 +126,41 @@ class BitcoindElectrsApi extends BitcoinApi implements AbstractBitcoinApi {
     }
   }
 
-  async $getAddressUtxos(address: string): Promise<IEsploraApi.Utxo[]> {
+  async $getUtxosForAddress(address: string): Promise<IEsploraApi.Utxo[]> {
     const addressInfo = await this.bitcoindClient.validateAddress(address);
     if (!addressInfo || !addressInfo.isvalid) {
       return [];
     }
 
     try {
-      const utxo = await this.$getScriptHashUtxos(addressInfo.scriptPubKey);
-      logger.info('utxo from electrum', JSON.stringify(utxo));
-      return utxo;
+      const allUtxos = await this.$getScriptHashUtxos(addressInfo.scriptPubKey);
+      if (!allUtxos || allUtxos.length === 0) {
+        return [];
+      }
+
+      // logger.info(typeof allUtxos, 'electrum utxo type');
+      // logger.info(JSON.stringify(allUtxos), 'electrum utxo data');
+      // console.log(allUtxos);
+
+      const utxos = allUtxos.map((unspend: IEsploraApi.Unspend) => {
+        return {
+          txid: unspend.tx_hash,
+          vout: unspend.tx_pos,
+          value: unspend.value,
+          status: {
+            confirmed: unspend.height > 0,
+            block_height: unspend.height,
+            // TODO: loop fetch block info from block height => block hash => block info
+            // block_hash?: string;
+            // block_time?: number;
+          }
+        };
+      }) as IEsploraApi.Utxo[];
+      if (!utxos || utxos.length === 0) {
+        return [];
+      }
+
+      return utxos;
     } catch (e: any) {
       throw new Error(typeof e === 'string' ? e : e && e.message || e);
     }
@@ -216,10 +241,20 @@ class BitcoindElectrsApi extends BitcoinApi implements AbstractBitcoinApi {
     return this.electrumClient.blockchainScripthash_getBalance(this.encodeScriptHash(scriptHash));
   }
 
-  private async $getScriptHashUtxos(scriptHash: string): Promise<IEsploraApi.Utxo[]> {
-    const utxos = await this.electrumClient.blockchainScripthash_listunspent(this.encodeScriptHash(scriptHash));
-    logger.info('raw utxo data is ', JSON.stringify(utxos));
-    return utxos;
+  private async $getScriptHashUtxos(scriptHash: string): Promise<IEsploraApi.Unspend[]> {
+    const allUnspends = await this.electrumClient.blockchainScripthash_listunspent(this.encodeScriptHash(scriptHash));
+    logger.info(JSON.stringify(allUnspends), 'raw unspend utxo data');
+
+    // [[
+    //   {
+    //     "height":129,
+    //     "tx_hash":"a23b1a752d41d03a94bef1e992ca8b7bee541fab3816ac9b52a3220b576a2dcb",
+    //     "tx_pos":0,
+    //     "value":5000010000
+    //   }
+    // ]]
+
+    return allUnspends;
   }
 
   private $getScriptHashHistory(scriptHash: string): Promise<IElectrumApi.ScriptHashHistory[]> {
@@ -238,7 +273,6 @@ class BitcoindElectrsApi extends BitcoinApi implements AbstractBitcoinApi {
     const addrScripthash = crypto.enc.Hex.stringify(crypto.SHA256(crypto.enc.Hex.parse(scriptPubKey)));
     return addrScripthash!.match(/.{2}/g)!.reverse().join('');
   }
-
 }
 
 export default BitcoindElectrsApi;
