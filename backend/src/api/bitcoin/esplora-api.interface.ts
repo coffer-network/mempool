@@ -20,6 +20,13 @@ export namespace IEsploraApi {
     status: Status;
   }
 
+  export interface Unspend {
+    height: number;
+    tx_hash: string;
+    tx_pos: number;
+    value: number;
+  }
+
   export interface Recent {
     txid: string;
     fee: number;
