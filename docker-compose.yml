@@ -1,6 +1,6 @@
 services:
   web:
-    image: mempool/frontend:latest
+    image: coffernetwork/mempool-frontend:latest
     container_name: coffer-regtest-mempool-web
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -16,16 +16,21 @@ services:
       - 127.0.0.1:8080:8080
     networks:
       regtest-mempool:
+      # coffer-regtest-node_regtest-node:
       coffer-regtest-node_regtest-node:
 
   api:
-    image: mempool/backend:latest
+    image: coffernetwork/mempool-backend:latest
     container_name: coffer-regtest-mempool-api
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
-      MEMPOOL_NETWORK": "regtest"
+      ## MEMPOOL_NETWORK: "mainnet" # dont set MEMPOOL_NETWORK to regtest, mempool frontend not support regtest, use default mainnet is ok
+      MEMPOOL_ENABLED: "true"
       MEMPOOL_BACKEND: "electrum"
+      ## MEMPOOL_BACKEND: "esplora"
+      ## ESPLORA_REST_API_URL: "http://host.docker.internal:3002"
+      ## ESPLORA_REST_API_URL: "http://coffer-regtest-node-regtest-electrs:3002"
       # ELECTRUM_HOST: "host.docker.internal"
       ELECTRUM_HOST: "coffer-regtest-node-regtest-electrs"
       ELECTRUM_PORT: "60401"
@@ -40,6 +45,7 @@ services:
       DATABASE_DATABASE: "mempool"
       DATABASE_USERNAME: "mempool"
       DATABASE_PASSWORD: "mempool"
+      # STATISTICS_ENABLED: "true"
       STATISTICS_ENABLED: "false"
     # user: "1000:1000"
     # restart: on-failure
@@ -52,6 +58,7 @@ services:
       - ./data:/backend/cache
     networks:
       regtest-mempool:
+      # coffer-regtest-node_regtest-node:
       coffer-regtest-node_regtest-node:
 
   db:
@@ -70,6 +77,9 @@ services:
     # stop_grace_period: 1m
     volumes:
       - ./mysql/data:/var/lib/mysql
+      - ./mysql/pids:/var/run/mysqld
+      - ./mysql/logs:/var/log/mysql
+      - ./mysql/conf.d:/etc/mysql/conf.d
     networks:
       regtest-mempool:
 
