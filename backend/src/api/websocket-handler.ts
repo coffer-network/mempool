@@ -16,16 +16,19 @@ import transactionUtils from './transaction-utils';
 import rbfCache, { ReplacementInfo } from './rbf-cache';
 import difficultyAdjustment from './difficulty-adjustment';
 import feeApi from './fee-api';
+import BlocksRepository from '../repositories/BlocksRepository';
 import BlocksAuditsRepository from '../repositories/BlocksAuditsRepository';
 import BlocksSummariesRepository from '../repositories/BlocksSummariesRepository';
 import Audit from './audit';
 import priceUpdater from '../tasks/price-updater';
 import { ApiPrice } from '../repositories/PricesRepository';
+import { Acceleration } from './services/acceleration';
 import accelerationApi from './services/acceleration';
 import mempool from './mempool';
 import statistics from './statistics/statistics';
 import accelerationRepository from '../repositories/AccelerationRepository';
 import bitcoinApi from './bitcoin/bitcoin-api-factory';
+import walletApi from './services/wallets';
 
 interface AddressTransactions {
   mempool: MempoolTransactionExtended[],
@@ -34,6 +37,8 @@ interface AddressTransactions {
 }
 import bitcoinSecondClient from './bitcoin/bitcoin-second-client';
 import { calculateMempoolTxCpfp } from './cpfp';
+import { getRecentFirstSeen } from '../utils/file-read';
+import stratumApi, { StratumJob } from './services/stratum';
 
 // valid 'want' subscriptions
 const wantable = [
@@ -56,6 +61,8 @@ class WebsocketHandler {
   private serializedInitData: string = '{}';
   private lastRbfSummary: ReplacementInfo[] | null = null;
   private mempoolSequence: number = 0;
+
+  private accelerations: Record<string, Acceleration> = {};
 
   constructor() { }
 
@@ -305,6 +312,14 @@ class WebsocketHandler {
             }
           }
 
+          if (parsedMessage && parsedMessage['track-wallet']) {
+            if (parsedMessage['track-wallet'] === 'stop') {
+              client['track-wallet'] = null;
+            } else {
+              client['track-wallet'] = parsedMessage['track-wallet'];
+            }
+          }
+
           if (parsedMessage && parsedMessage['track-asset']) {
             if (/^[a-fA-F0-9]{64}$/.test(parsedMessage['track-asset'])) {
               client['track-asset'] = parsedMessage['track-asset'];
@@ -387,6 +402,16 @@ class WebsocketHandler {
             client['track-mempool'] = true;
           } else if (parsedMessage['track-mempool'] === false) {
             delete client['track-mempool'];
+          }
+
+          if (parsedMessage && parsedMessage['track-stratum'] != null) {
+            if (parsedMessage['track-stratum']) {
+              const sub = parsedMessage['track-stratum'];
+              client['track-stratum'] = sub;
+              response['stratumJobs'] = this.socketData['stratumJobs'];
+            } else {
+              client['track-stratum'] = false;
+            }
           }
 
           if (Object.keys(response).length) {
@@ -484,6 +509,42 @@ class WebsocketHandler {
     }
   }
 
+  handleAccelerationsChanged(accelerations: Record<string, Acceleration>): void {
+    if (!this.webSocketServers.length) {
+      throw new Error('No WebSocket.Server has been set');
+    }
+
+    const websocketAccelerationDelta = accelerationApi.getAccelerationDelta(this.accelerations, accelerations);
+    this.accelerations = accelerations;
+
+    if (!websocketAccelerationDelta.length) {
+      return;
+    }
+
+    // pre-compute acceleration delta
+    const accelerationUpdate = {
+      added: websocketAccelerationDelta.map(txid => accelerations[txid]).filter(acc => acc != null),
+      removed: websocketAccelerationDelta.filter(txid => !accelerations[txid]),
+    };
+
+    try {
+      const response = JSON.stringify({
+        accelerations: accelerationUpdate,
+      });
+
+      for (const server of this.webSocketServers) {
+        server.clients.forEach((client) => {
+          if (client.readyState !== WebSocket.OPEN) {
+            return;
+          }
+          client.send(response);
+        });
+      }
+    } catch (e) {
+      logger.debug(`Error sending acceleration update to websocket clients: ${e}`);
+    }
+  }
+
   handleReorg(): void {
     if (!this.webSocketServers.length) {
       throw new Error('No WebSocket.Server have been set');
@@ -560,7 +621,7 @@ class WebsocketHandler {
     const vBytesPerSecond = memPool.getVBytesPerSecond();
     const rbfTransactions = Common.findRbfTransactions(newTransactions, recentlyDeletedTransactions.flat());
     const da = difficultyAdjustment.getDifficultyAdjustment();
-    const accelerations = memPool.getAccelerations();
+    const accelerations = accelerationApi.getAccelerations();
     memPool.handleRbfTransactions(rbfTransactions);
     const rbfChanges = rbfCache.getRbfChanges();
     let rbfReplacements;
@@ -668,10 +729,13 @@ class WebsocketHandler {
     const addressCache = this.makeAddressCache(newTransactions);
     const removedAddressCache = this.makeAddressCache(deletedTransactions);
 
+    const websocketAccelerationDelta = accelerationApi.getAccelerationDelta(this.accelerations, accelerations);
+    this.accelerations = accelerations;
+
     // pre-compute acceleration delta
     const accelerationUpdate = {
-      added: accelerationDelta.map(txid => accelerations[txid]).filter(acc => acc != null),
-      removed: accelerationDelta.filter(txid => !accelerations[txid]),
+      added: websocketAccelerationDelta.map(txid => accelerations[txid]).filter(acc => acc != null),
+      removed: websocketAccelerationDelta.filter(txid => !accelerations[txid]),
     };
 
     // TODO - Fix indentation after PR is merged
@@ -1028,6 +1092,14 @@ class WebsocketHandler {
       }
     }
 
+    if (config.CORE_RPC.DEBUG_LOG_PATH && block.extras) {
+      const firstSeen = getRecentFirstSeen(block.id);
+      if (firstSeen) {
+        BlocksRepository.$saveFirstSeenTime(block.id, firstSeen);
+        block.extras.firstSeen = firstSeen;
+      }
+    }
+
     const confirmedTxids: { [txid: string]: boolean } = {};
 
     // Update mempool to remove transactions included in the new block
@@ -1101,6 +1173,9 @@ class WebsocketHandler {
       mined: transactions.map(tx => tx.txid),
       replaced: replacedTransactions,
     };
+
+    // check for wallet transactions
+    const walletTransactions = config.WALLETS.ENABLED ? walletApi.processBlock(block, transactions) : [];
 
     const responseCache = { ...this.socketData };
     function getCachedResponse(key, data): string {
@@ -1306,6 +1381,11 @@ class WebsocketHandler {
         response['mempool-transactions'] = getCachedResponse('mempool-transactions', mempoolDelta);
       }
 
+      if (client['track-wallet']) {
+        const trackedWallet = client['track-wallet'];
+        response['wallet-transactions'] = getCachedResponse(`wallet-transactions-${trackedWallet}`, walletTransactions[trackedWallet] ?? {});
+      }
+
       if (Object.keys(response).length) {
         client.send(this.serializeResponse(response));
       }
@@ -1313,6 +1393,23 @@ class WebsocketHandler {
     }
 
     await statistics.runStatistics();
+  }
+
+  public handleNewStratumJob(job: StratumJob): void {
+    this.updateSocketDataFields({ 'stratumJobs': stratumApi.getJobs() });
+
+    for (const server of this.webSocketServers) {
+      server.clients.forEach((client) => {
+        if (client.readyState !== WebSocket.OPEN) {
+          return;
+        }
+        if (client['track-stratum'] && (client['track-stratum'] === 'all' || client['track-stratum'] === job.pool)) {
+          client.send(JSON.stringify({
+            'stratumJob': job
+        }));
+        }
+      });
+    }
   }
 
   // takes a dictionary of JSON serialized values

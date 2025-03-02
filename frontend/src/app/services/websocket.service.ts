@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { WebsocketResponse } from '../interfaces/websocket.interface';
-import { StateService } from './state.service';
-import { Transaction } from '../interfaces/electrs.interface';
+import { WebsocketResponse } from '@interfaces/websocket.interface';
+import { StateService } from '@app/services/state.service';
+import { Transaction } from '@interfaces/electrs.interface';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { ApiService } from './api.service';
+import { ApiService } from '@app/services/api.service';
 import { take } from 'rxjs/operators';
 import { TransferState, makeStateKey } from '@angular/core';
-import { CacheService } from './cache.service';
-import { uncompressDeltaChange, uncompressTx } from '../shared/common.utils';
+import { CacheService } from '@app/services/cache.service';
+import { uncompressDeltaChange, uncompressTx } from '@app/shared/common.utils';
 
 const OFFLINE_RETRY_AFTER_MS = 2000;
 const OFFLINE_PING_CHECK_AFTER_MS = 30000;
@@ -34,7 +34,11 @@ export class WebsocketService {
   private isTrackingAddress: string | false = false;
   private isTrackingAddresses: string[] | false = false;
   private isTrackingAccelerations: boolean = false;
+  private isTrackingWallet: boolean = false;
+  private trackingWalletName: string;
+  private isTrackingStratum: string | number | false = false;
   private trackingMempoolBlock: number;
+  private trackingMempoolBlockNetwork: string;
   private stoppingTrackMempoolBlock: any | null = null;
   private latestGitCommit = '';
   private onlineCheckTimeout: number;
@@ -137,6 +141,12 @@ export class WebsocketService {
           if (this.isTrackingAccelerations) {
             this.startTrackAccelerations();
           }
+          if (this.isTrackingWallet) {
+            this.startTrackingWallet(this.trackingWalletName);
+          }
+          if (this.isTrackingStratum !== false) {
+            this.startTrackStratum(this.isTrackingStratum);
+          }
           this.stateService.connectionState$.next(2);
         }
 
@@ -196,6 +206,18 @@ export class WebsocketService {
     this.isTrackingAddresses = false;
   }
 
+  startTrackingWallet(walletName: string) {
+    this.websocketSubject.next({ 'track-wallet': walletName });
+    this.isTrackingWallet = true;
+    this.trackingWalletName = walletName;
+  }
+
+  stopTrackingWallet() {
+    this.websocketSubject.next({ 'track-wallet': 'stop' });
+    this.isTrackingWallet = false;
+    this.trackingWalletName = '';
+  }
+
   startTrackAsset(asset: string) {
     this.websocketSubject.next({ 'track-asset': asset });
   }
@@ -209,10 +231,11 @@ export class WebsocketService {
       clearTimeout(this.stoppingTrackMempoolBlock);
     }
     // skip duplicate tracking requests
-    if (force || this.trackingMempoolBlock !== block) {
+    if (force || this.trackingMempoolBlock !== block || this.network !== this.trackingMempoolBlockNetwork) {
       this.websocketSubject.next({ 'track-mempool-block': block });
       this.isTrackingMempoolBlock = true;
       this.trackingMempoolBlock = block;
+      this.trackingMempoolBlockNetwork = this.network;
       return true;
     }
     return false;
@@ -267,6 +290,18 @@ export class WebsocketService {
   ensureTrackAccelerations() {
     if (!this.isTrackingAccelerations) {
       this.startTrackAccelerations();
+    }
+  }
+
+  startTrackStratum(pool: number | string) {
+    this.websocketSubject.next({ 'track-stratum': pool });
+    this.isTrackingStratum = pool;
+  }
+
+  stopTrackStratum() {
+    if (this.isTrackingStratum) {
+      this.websocketSubject.next({ 'track-stratum': null });
+      this.isTrackingStratum = false;
     }
   }
 
@@ -452,6 +487,10 @@ export class WebsocketService {
       }
     }
 
+    if (response['wallet-transactions']) {
+      this.stateService.walletTransactions$.next(response['wallet-transactions']);
+    }
+
     if (response['accelerations']) {
       if (response['accelerations'].accelerations) {
         this.stateService.accelerations$.next({
@@ -487,6 +526,14 @@ export class WebsocketService {
 
     if (response.previousRetarget !== undefined) {
       this.stateService.previousRetarget$.next(response.previousRetarget);
+    }
+
+    if (response.stratumJobs) {
+      this.stateService.stratumJobUpdate$.next({ state: response.stratumJobs });
+    }
+
+    if (response.stratumJob) {
+      this.stateService.stratumJobUpdate$.next({ job: response.stratumJob });
     }
 
     if (response['tomahawk']) {

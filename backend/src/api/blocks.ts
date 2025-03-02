@@ -33,7 +33,8 @@ import AccelerationRepository from '../repositories/AccelerationRepository';
 import { calculateFastBlockCpfp, calculateGoodBlockCpfp } from './cpfp';
 import mempool from './mempool';
 import CpfpRepository from '../repositories/CpfpRepository';
-import accelerationApi from './services/acceleration';
+import { parseDATUMTemplateCreator } from '../utils/bitcoin-script';
+import database from '../database';
 
 class Blocks {
   private blocks: BlockExtended[] = [];
@@ -342,7 +343,12 @@ class Blocks {
           id: pool.uniqueId,
           name: pool.name,
           slug: pool.slug,
+          minerNames: null,
         };
+
+        if (extras.pool.name === 'OCEAN') {
+          extras.pool.minerNames = parseDATUMTemplateCreator(extras.coinbaseRaw);
+        }
       }
 
       extras.matchRate = null;
@@ -406,8 +412,16 @@ class Blocks {
     }
 
     try {
+      const blockchainInfo = await bitcoinClient.getBlockchainInfo();
+      const currentBlockHeight = blockchainInfo.blocks;
+      let indexingBlockAmount = Math.min(config.MEMPOOL.INDEXING_BLOCKS_AMOUNT, currentBlockHeight);
+      if (indexingBlockAmount <= -1) {
+        indexingBlockAmount = currentBlockHeight + 1;
+      }
+      const lastBlockToIndex = Math.max(0, currentBlockHeight - indexingBlockAmount + 1);
+
       // Get all indexed block hash
-      const indexedBlocks = await blocksRepository.$getIndexedBlocks();
+      const indexedBlocks = (await blocksRepository.$getIndexedBlocks()).filter(block => block.height >= lastBlockToIndex);
       const indexedBlockSummariesHashesArray = await BlocksSummariesRepository.$getIndexedSummariesId();
 
       const indexedBlockSummariesHashes = {}; // Use a map for faster seek during the indexing loop
@@ -1210,6 +1224,11 @@ class Blocks {
     return summary.transactions;
   }
 
+  public async $getSingleTxFromSummary(hash: string, txid: string): Promise<TransactionClassified | null> {
+    const txs = await this.$getStrippedBlockTransactions(hash);
+    return txs.find(tx => tx.txid === txid) || null;
+  }
+
   /**
    * Get 15 blocks
    * 
@@ -1441,6 +1460,36 @@ class Blocks {
       }
     } catch (e) {
       // not a fatal error, we'll try again next time the indexer runs
+    }
+  }
+
+  public async $getBlockDefinitionHashes(): Promise<string[] | null> {
+    try {
+      const [rows]: any = await database.query(`SELECT DISTINCT(definition_hash) FROM blocks`);
+      if (rows && Array.isArray(rows)) {
+        return rows.map(r => r.definition_hash);
+      } else {
+        logger.debug(`Unable to retreive list of blocks.definition_hash from db (no result)`);
+        return null;
+      }
+    } catch (e) {
+      logger.debug(`Unable to retreive list of blocks.definition_hash from db (exception: ${e})`);
+      return null;
+    }
+  }
+
+  public async $getBlocksByDefinitionHash(definitionHash: string): Promise<string[] | null> {
+    try {
+      const [rows]: any = await database.query(`SELECT hash FROM blocks WHERE definition_hash = ?`, [definitionHash]);
+      if (rows && Array.isArray(rows)) {
+        return rows.map(r => r.hash);
+      } else {
+        logger.debug(`Unable to retreive list of blocks for definition hash ${definitionHash} from db (no result)`);
+        return null;
+      }
+    } catch (e) {
+      logger.debug(`Unable to retreive list of blocks for definition hash ${definitionHash} from db (exception: ${e})`);
+      return null;
     }
   }
 }

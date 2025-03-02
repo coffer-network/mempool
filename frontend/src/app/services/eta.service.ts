@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AccelerationPosition, CpfpInfo, DifficultyAdjustment, MempoolPosition, SinglePoolStats } from '../interfaces/node-api.interface';
-import { StateService } from './state.service';
-import { MempoolBlock } from '../interfaces/websocket.interface';
-import { Transaction } from '../interfaces/electrs.interface';
-import { MiningService, MiningStats } from './mining.service';
-import { getUnacceleratedFeeRate } from '../shared/transaction.utils';
-import { AccelerationEstimate } from '../components/accelerate-checkout/accelerate-checkout.component';
+import { AccelerationPosition, CpfpInfo, DifficultyAdjustment, MempoolPosition, SinglePoolStats } from '@interfaces/node-api.interface';
+import { StateService } from '@app/services/state.service';
+import { MempoolBlock } from '@interfaces/websocket.interface';
+import { Transaction } from '@interfaces/electrs.interface';
+import { MiningService, MiningStats } from '@app/services/mining.service';
+import { getUnacceleratedFeeRate } from '@app/shared/transaction.utils';
+import { AccelerationEstimate } from '@components/accelerate-checkout/accelerate-checkout.component';
 import { Observable, combineLatest, map, of, share, shareReplay, tap } from 'rxjs';
 
 export interface ETA {
@@ -55,7 +55,7 @@ export class EtaService {
 
         return {
           hashratePercentage: acceleratingHashrateFraction * 100,
-          ETA: Date.now() + da.timeAvg * mempoolPosition.block,
+          ETA: Date.now() + da.adjustedTimeAvg * mempoolPosition.block,
           acceleratedETA: this.calculateETAFromShares([
             { block: mempoolPosition.block, hashrateShare: (1 - acceleratingHashrateFraction) },
             { block: 0, hashrateShare: acceleratingHashrateFraction },
@@ -216,7 +216,7 @@ export class EtaService {
       }
       // at max depth, the transaction is guaranteed to be mined in the next block if it hasn't already
       Q += ((max + 1) * (1-tailProb));
-      const eta = da.timeAvg * Q; // T x Q
+      const eta = da.adjustedTimeAvg * Q; // T x Q
 
       return {
         now,

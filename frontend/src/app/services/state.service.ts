@@ -1,14 +1,14 @@
 import { Inject, Injectable, PLATFORM_ID, LOCALE_ID } from '@angular/core';
 import { ReplaySubject, BehaviorSubject, Subject, fromEvent, Observable } from 'rxjs';
-import { Transaction } from '../interfaces/electrs.interface';
-import { AccelerationDelta, HealthCheckHost, IBackendInfo, MempoolBlock, MempoolBlockUpdate, MempoolInfo, Recommendedfees, ReplacedTransaction, ReplacementInfo, isMempoolState } from '../interfaces/websocket.interface';
-import { Acceleration, AccelerationPosition, BlockExtended, CpfpInfo, DifficultyAdjustment, MempoolPosition, OptimizedMempoolStats, RbfTree, TransactionStripped } from '../interfaces/node-api.interface';
+import { Transaction } from '@interfaces/electrs.interface';
+import { AccelerationDelta, HealthCheckHost, IBackendInfo, MempoolBlock, MempoolBlockUpdate, MempoolInfo, Recommendedfees, ReplacedTransaction, ReplacementInfo, StratumJob, isMempoolState } from '@interfaces/websocket.interface';
+import { Acceleration, AccelerationPosition, BlockExtended, CpfpInfo, DifficultyAdjustment, MempoolPosition, OptimizedMempoolStats, RbfTree, TransactionStripped } from '@interfaces/node-api.interface';
 import { Router, NavigationStart } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { filter, map, scan, share, shareReplay } from 'rxjs/operators';
-import { StorageService } from './storage.service';
-import { hasTouchScreen } from '../shared/pipes/bytes-pipe/utils';
-import { ActiveFilter } from '../shared/filters.utils';
+import { StorageService } from '@app/services/storage.service';
+import { hasTouchScreen } from '@app/shared/pipes/bytes-pipe/utils';
+import { ActiveFilter } from '@app/shared/filters.utils';
 
 export interface MarkBlockState {
   blockHeight?: number;
@@ -68,7 +68,12 @@ export interface Env {
   AUDIT: boolean;
   MAINNET_BLOCK_AUDIT_START_HEIGHT: number;
   TESTNET_BLOCK_AUDIT_START_HEIGHT: number;
+  TESTNET4_BLOCK_AUDIT_START_HEIGHT: number;
   SIGNET_BLOCK_AUDIT_START_HEIGHT: number;
+  MAINNET_TX_FIRST_SEEN_START_HEIGHT: number;
+  TESTNET_TX_FIRST_SEEN_START_HEIGHT: number;
+  TESTNET4_TX_FIRST_SEEN_START_HEIGHT: number;
+  SIGNET_TX_FIRST_SEEN_START_HEIGHT: number;
   HISTORICAL_PRICE: boolean;
   ACCELERATOR: boolean;
   ACCELERATOR_BUTTON: boolean;
@@ -76,8 +81,10 @@ export interface Env {
   ADDITIONAL_CURRENCIES: boolean;
   GIT_COMMIT_HASH_MEMPOOL_SPACE?: string;
   PACKAGE_JSON_VERSION_MEMPOOL_SPACE?: string;
+  STRATUM_ENABLED: boolean;
   SERVICES_API?: string;
   customize?: Customization;
+  PROD_DOMAINS: string[];
 }
 
 const defaultEnv: Env = {
@@ -106,13 +113,20 @@ const defaultEnv: Env = {
   'AUDIT': false,
   'MAINNET_BLOCK_AUDIT_START_HEIGHT': 0,
   'TESTNET_BLOCK_AUDIT_START_HEIGHT': 0,
+  'TESTNET4_BLOCK_AUDIT_START_HEIGHT': 0,
   'SIGNET_BLOCK_AUDIT_START_HEIGHT': 0,
+  'MAINNET_TX_FIRST_SEEN_START_HEIGHT': 0,
+  'TESTNET_TX_FIRST_SEEN_START_HEIGHT': 0,
+  'TESTNET4_TX_FIRST_SEEN_START_HEIGHT': 0,
+  'SIGNET_TX_FIRST_SEEN_START_HEIGHT': 0,
   'HISTORICAL_PRICE': true,
   'ACCELERATOR': false,
   'ACCELERATOR_BUTTON': true,
   'PUBLIC_ACCELERATIONS': false,
   'ADDITIONAL_CURRENCIES': false,
+  'STRATUM_ENABLED': false,
   'SERVICES_API': 'https://mempool.space/api/v1/services',
+  'PROD_DOMAINS': [],
 };
 
 @Injectable({
@@ -147,6 +161,8 @@ export class StateService {
   liveMempoolBlockTransactions$: Observable<{ block: number, transactions: { [txid: string]: TransactionStripped} }>;
   accelerations$ = new Subject<AccelerationDelta>();
   liveAccelerations$: Observable<Acceleration[]>;
+  stratumJobUpdate$ = new Subject<{ state: Record<string, StratumJob> } | { job: StratumJob }>();
+  stratumJobs$ = new BehaviorSubject<Record<string, StratumJob>>({});
   txConfirmed$ = new Subject<[string, BlockExtended]>();
   txReplaced$ = new Subject<ReplacedTransaction>();
   txRbfInfo$ = new Subject<RbfTree>();
@@ -159,6 +175,7 @@ export class StateService {
   mempoolRemovedTransactions$ = new Subject<Transaction>();
   multiAddressTransactions$ = new Subject<{ [address: string]: { mempool: Transaction[], confirmed: Transaction[], removed: Transaction[] }}>();
   blockTransactions$ = new Subject<Transaction>();
+  walletTransactions$ = new Subject<Transaction[]>();
   isLoadingWebSocket$ = new ReplaySubject<boolean>(1);
   isLoadingMempool$ = new BehaviorSubject<boolean>(true);
   vbytesPerSecond$ = new ReplaySubject<number>(1);
@@ -173,6 +190,7 @@ export class StateService {
   live2Chart$ = new Subject<OptimizedMempoolStats>();
 
   viewAmountMode$: BehaviorSubject<'btc' | 'sats' | 'fiat'>;
+  timezone$: BehaviorSubject<string>;
   connectionState$ = new BehaviorSubject<0 | 1 | 2>(2);
   isTabHidden$: Observable<boolean>;
 
@@ -205,6 +223,10 @@ export class StateService {
     const browserWindow = window || {};
     // @ts-ignore
     const browserWindowEnv = browserWindow.__env || {};
+    if (browserWindowEnv.PROD_DOMAINS && typeof(browserWindowEnv.PROD_DOMAINS) === 'string') {
+      browserWindowEnv.PROD_DOMAINS = browserWindowEnv.PROD_DOMAINS.split(',');
+    }
+
     this.env = Object.assign(defaultEnv, browserWindowEnv);
 
     if (defaultEnv.BASE_MODULE !== 'mempool') {
@@ -285,6 +307,24 @@ export class StateService {
       map((accMap) => Object.values(accMap).sort((a,b) => b.added - a.added))
     );
 
+    this.stratumJobUpdate$.pipe(
+      scan((acc: Record<string, StratumJob>, update: { state: Record<string, StratumJob> } | { job: StratumJob }) => {
+        if ('state' in update) {
+          // Replace the entire state
+          return update.state;
+        } else {
+          // Update or create a single job entry
+          return {
+            ...acc,
+            [update.job.pool]: update.job
+          };
+        }
+      }, {}),
+      shareReplay(1)
+    ).subscribe(val => {
+      this.stratumJobs$.next(val);
+    });
+
     this.networkChanged$.subscribe((network) => {
       this.transactions$ = new BehaviorSubject<TransactionStripped[]>(null);
       this.blocksSubject$.next([]);
@@ -329,6 +369,9 @@ export class StateService {
 
     const viewAmountModePreference = this.storageService.getValue('view-amount-mode') as 'btc' | 'sats' | 'fiat';
     this.viewAmountMode$ = new BehaviorSubject<'btc' | 'sats' | 'fiat'>(viewAmountModePreference || 'btc');
+
+    const timezonePreference = this.storageService.getValue('timezone-preference');
+    this.timezone$ = new BehaviorSubject<string>(timezonePreference || 'local');
 
     this.backend$.subscribe(backend => {
       this.backend = backend;

@@ -1,23 +1,23 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { ElectrsApiService } from '../../services/electrs-api.service';
-import { switchMap, tap, throttleTime, catchError, map, shareReplay, startWith, filter } from 'rxjs/operators';
+import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
+import { ElectrsApiService } from '@app/services/electrs-api.service';
+import { switchMap, tap, throttleTime, catchError, map, shareReplay, startWith, filter, take } from 'rxjs/operators';
 import { Observable, of, Subscription, asyncScheduler, EMPTY, combineLatest, forkJoin } from 'rxjs';
-import { StateService } from '../../services/state.service';
-import { SeoService } from '../../services/seo.service';
-import { WebsocketService } from '../../services/websocket.service';
-import { RelativeUrlPipe } from '../../shared/pipes/relative-url/relative-url.pipe';
-import { Acceleration, BlockAudit, BlockExtended, TransactionStripped } from '../../interfaces/node-api.interface';
-import { ApiService } from '../../services/api.service';
-import { BlockOverviewGraphComponent } from '../../components/block-overview-graph/block-overview-graph.component';
-import { detectWebGL } from '../../shared/graphs.utils';
-import { seoDescriptionNetwork } from '../../shared/common.utils';
-import { PriceService, Price } from '../../services/price.service';
-import { CacheService } from '../../services/cache.service';
-import { ServicesApiServices } from '../../services/services-api.service';
-import { PreloadService } from '../../services/preload.service';
-import { identifyPrioritizedTransactions } from '../../shared/transaction.utils';
+import { StateService } from '@app/services/state.service';
+import { SeoService } from '@app/services/seo.service';
+import { WebsocketService } from '@app/services/websocket.service';
+import { RelativeUrlPipe } from '@app/shared/pipes/relative-url/relative-url.pipe';
+import { Acceleration, BlockAudit, BlockExtended, TransactionStripped } from '@interfaces/node-api.interface';
+import { ApiService } from '@app/services/api.service';
+import { BlockOverviewGraphComponent } from '@components/block-overview-graph/block-overview-graph.component';
+import { detectWebGL } from '@app/shared/graphs.utils';
+import { seoDescriptionNetwork } from '@app/shared/common.utils';
+import { PriceService, Price } from '@app/services/price.service';
+import { CacheService } from '@app/services/cache.service';
+import { ServicesApiServices } from '@app/services/services-api.service';
+import { PreloadService } from '@app/services/preload.service';
+import { identifyPrioritizedTransactions } from '@app/shared/transaction.utils';
 
 @Component({
   selector: 'app-block',
@@ -68,6 +68,7 @@ export class BlockComponent implements OnInit, OnDestroy {
   paginationMaxSize = window.matchMedia('(max-width: 670px)').matches ? 3 : 5;
   numUnexpected: number = 0;
   mode: 'projected' | 'actual' = 'projected';
+  currentQueryParams: Params;
 
   overviewSubscription: Subscription;
   accelerationsSubscription: Subscription;
@@ -80,8 +81,8 @@ export class BlockComponent implements OnInit, OnDestroy {
   timeLtr: boolean;
   childChangeSubscription: Subscription;
   auditPrefSubscription: Subscription;
+  isAuditEnabledSubscription: Subscription;
   oobSubscription: Subscription;
-  
   priceSubscription: Subscription;
   blockConversion: Price;
 
@@ -118,7 +119,7 @@ export class BlockComponent implements OnInit, OnDestroy {
     this.setAuditAvailable(this.auditSupported);
 
     if (this.auditSupported) {
-      this.isAuditEnabledFromParam().subscribe(auditParam => {
+      this.isAuditEnabledSubscription = this.isAuditEnabledFromParam().subscribe(auditParam => {
         if (this.auditParamEnabled) {
           this.auditModeEnabled = auditParam;
         } else {
@@ -281,7 +282,7 @@ export class BlockComponent implements OnInit, OnDestroy {
         }
       }),
       throttleTime(300, asyncScheduler, { leading: true, trailing: true }),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
     this.overviewSubscription = this.block$.pipe(
@@ -363,6 +364,7 @@ export class BlockComponent implements OnInit, OnDestroy {
       .subscribe((network) => this.network = network);
 
     this.queryParamsSubscription = this.route.queryParams.subscribe((params) => {
+      this.currentQueryParams = params;
       if (params.showDetails === 'true') {
         this.showDetails = true;
       } else {
@@ -414,6 +416,7 @@ export class BlockComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.stateService.markBlock$.next({});
     this.overviewSubscription?.unsubscribe();
+    this.accelerationsSubscription?.unsubscribe();
     this.keyNavigationSubscription?.unsubscribe();
     this.blocksSubscription?.unsubscribe();
     this.cacheBlocksSubscription?.unsubscribe();
@@ -421,8 +424,16 @@ export class BlockComponent implements OnInit, OnDestroy {
     this.queryParamsSubscription?.unsubscribe();
     this.timeLtrSubscription?.unsubscribe();
     this.childChangeSubscription?.unsubscribe();
-    this.priceSubscription?.unsubscribe();
+    this.auditPrefSubscription?.unsubscribe();
+    this.isAuditEnabledSubscription?.unsubscribe();
     this.oobSubscription?.unsubscribe();
+    this.priceSubscription?.unsubscribe();
+    this.blockGraphProjected.forEach(graph => {
+      graph.destroy();
+    });
+    this.blockGraphActual.forEach(graph => {
+      graph.destroy();
+    });
   }
 
   // TODO - Refactor this.fees/this.reward for liquid because it is not
@@ -733,19 +744,18 @@ export class BlockComponent implements OnInit, OnDestroy {
   toggleAuditMode(): void {
     this.stateService.hideAudit.next(this.auditModeEnabled);
 
-    this.route.queryParams.subscribe(params => {
-      const queryParams = { ...params };
-      delete queryParams['audit'];
+    const queryParams = { ...this.currentQueryParams };
+    delete queryParams['audit'];
 
-      let newUrl = this.router.url.split('?')[0];
-      const queryString = new URLSearchParams(queryParams).toString();
-      if (queryString) {
-        newUrl += '?' + queryString;
-      }
-  
-      this.location.replaceState(newUrl);
-    });
+    let newUrl = this.router.url.split('?')[0];
+    const queryString = new URLSearchParams(queryParams).toString();
+    if (queryString) {
+      newUrl += '?' + queryString;
+    }
+    this.location.replaceState(newUrl);
 
+    // avoid duplicate subscriptions
+    this.auditPrefSubscription?.unsubscribe();
     this.auditPrefSubscription = this.stateService.hideAudit.subscribe((hide) => {
       this.auditModeEnabled = !hide;
       this.showAudit = this.auditAvailable && this.auditModeEnabled;
@@ -762,7 +772,7 @@ export class BlockComponent implements OnInit, OnDestroy {
     return this.route.queryParams.pipe(
       map(params => {
         this.auditParamEnabled = 'audit' in params;
-        
+
         return this.auditParamEnabled ? !(params['audit'] === 'false') : true;
       })
     );

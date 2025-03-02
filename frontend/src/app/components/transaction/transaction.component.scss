@@ -18,6 +18,7 @@
     line-height: 1;
   }
 }
+
 .tx-link {
   display: flex;
   flex-direction: row;
@@ -65,10 +66,6 @@
   color: white;
 }
 
-.btn-small-height {
-	line-height: 1;
-}
-
 .arrow-green {
 	color: var(--success);
 }
@@ -81,7 +78,7 @@
 	margin-bottom: 40px;
 }
 
-.row{
+.row {
 	flex-direction: column;
 	@media (min-width: 850px) {
 		flex-direction: row;
